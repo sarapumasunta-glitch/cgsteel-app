@@ -106,7 +106,7 @@ create table orders (
   actual_delivery_date date,
 
   -- acceso del cliente sin cuenta: token único no adivinable
-  tracking_token text not null unique default encode(gen_random_bytes(16), 'hex'),
+  tracking_token text not null unique default encode(extensions.gen_random_bytes(16), 'hex'),
 
   notes text,
   created_by uuid references profiles(id),
