@@ -15,11 +15,11 @@ export default function CotizarPage() {
     const supabase = createClient();
 
     const { error } = await supabase.from("quote_requests").insert({
-      full_name: form.get("full_name"),
-      company_name: form.get("company_name"),
-      email: form.get("email"),
-      phone: form.get("phone"),
-      description: form.get("description"),
+      full_name: String(form.get("full_name") ?? ""),
+      company_name: String(form.get("company_name") ?? "") || null,
+      email: String(form.get("email") ?? "") || null,
+      phone: String(form.get("phone") ?? "") || null,
+      description: String(form.get("description") ?? ""),
     });
 
     setStatus(error ? "error" : "sent");
