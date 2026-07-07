@@ -1,8 +1,25 @@
 import Link from "next/link";
+import { Instagram } from "lucide-react";
 import { NAV_LINKS } from "@/lib/nav";
 
 const WHATSAPP_NUMBER = "593983842395";
 const WHATSAPP_DISPLAY = "+593 98 384 2395";
+const INSTAGRAM_URL = "https://www.instagram.com/cgsteeldesign";
+const TIKTOK_URL = "https://www.tiktok.com/@cg.steel.design";
+
+function TikTokIcon({ size = 24 }: { size?: number }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M16.6 5.82c-.9-.86-1.5-2.02-1.6-3.32h-3.2v13.7c0 1.5-1.22 2.72-2.72 2.72a2.72 2.72 0 0 1-2.72-2.72 2.72 2.72 0 0 1 2.72-2.72c.28 0 .55.04.8.12v-3.27a6.02 6.02 0 0 0-.8-.05A5.97 5.97 0 0 0 3.12 16.2 5.97 5.97 0 0 0 9.1 22.16a5.97 5.97 0 0 0 5.97-5.97V9.4a8.16 8.16 0 0 0 4.77 1.53V7.72a4.85 4.85 0 0 1-3.24-1.9z" />
+    </svg>
+  );
+}
 
 export default function PublicFooter() {
   return (
@@ -17,13 +34,11 @@ export default function PublicFooter() {
         </div>
 
         <div>
-          <h3 className="font-semibold text-sm uppercase tracking-wide text-white/60">
-            Enlaces rápidos
-          </h3>
-          <ul className="mt-3 space-y-2 text-sm">
+          <h3 className="text-xs text-white/40">Enlaces rápidos</h3>
+          <ul className="mt-3 space-y-1.5 text-xs text-white/50">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="hover:text-brand-accent">
+                <Link href={link.href} className="hover:text-brand-accent transition-colors">
                   {link.label}
                 </Link>
               </li>
@@ -43,6 +58,27 @@ export default function PublicFooter() {
           >
             Escríbenos por WhatsApp
           </a>
+
+          <div className="mt-4 flex items-center gap-1 -ml-2.5">
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Síguenos en Instagram"
+              className="flex items-center justify-center w-10 h-10 rounded-full text-white hover:text-brand-accent transition-colors"
+            >
+              <Instagram size={24} />
+            </a>
+            <a
+              href={TIKTOK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Síguenos en TikTok"
+              className="flex items-center justify-center w-10 h-10 rounded-full text-white hover:text-brand-accent transition-colors"
+            >
+              <TikTokIcon size={24} />
+            </a>
+          </div>
         </div>
       </div>
 
