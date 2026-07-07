@@ -12,13 +12,20 @@ export default function ExpedienteUpload({ orderId }: { orderId: string }) {
   async function handleSubmit(formData: FormData) {
     setPending(true);
     setError(null);
-    const result = await uploadOrderFile(orderId, formData);
-    setPending(false);
-    if (result?.error) {
-      setError(result.error);
-      return;
+    try {
+      const result = await uploadOrderFile(orderId, formData);
+      if (result?.error) {
+        setError(result.error);
+        return;
+      }
+      formRef.current?.reset();
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Ocurrió un error inesperado al subir el archivo."
+      );
+    } finally {
+      setPending(false);
     }
-    formRef.current?.reset();
   }
 
   return (

@@ -18,10 +18,26 @@ export default function NewOrderForm({ clients }: { clients: ClientOption[] }) {
   async function handleSubmit(formData: FormData) {
     setPending(true);
     setError(null);
-    const result = await createOrder(formData);
-    setPending(false);
-    if (result?.error) {
-      setError(result.error);
+    try {
+      const result = await createOrder(formData);
+      if (result?.error) {
+        setError(result.error);
+      }
+    } catch (err) {
+      if (
+        typeof err === "object" &&
+        err !== null &&
+        "digest" in err &&
+        typeof (err as { digest: unknown }).digest === "string" &&
+        (err as { digest: string }).digest.startsWith("NEXT_REDIRECT")
+      ) {
+        throw err;
+      }
+      setError(
+        err instanceof Error ? err.message : "Ocurrió un error inesperado al crear el pedido."
+      );
+    } finally {
+      setPending(false);
     }
   }
 

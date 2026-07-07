@@ -11,13 +11,20 @@ export default function NewClientForm() {
   async function handleSubmit(formData: FormData) {
     setPending(true);
     setError(null);
-    const result = await createClientRecord(formData);
-    setPending(false);
-    if (result?.error) {
-      setError(result.error);
-      return;
+    try {
+      const result = await createClientRecord(formData);
+      if (result?.error) {
+        setError(result.error);
+        return;
+      }
+      setOpen(false);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Ocurrió un error inesperado al guardar el cliente."
+      );
+    } finally {
+      setPending(false);
     }
-    setOpen(false);
   }
 
   if (!open) {

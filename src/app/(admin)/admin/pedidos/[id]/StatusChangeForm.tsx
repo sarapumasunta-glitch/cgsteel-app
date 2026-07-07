@@ -17,10 +17,17 @@ export default function StatusChangeForm({
   async function handleSubmit(formData: FormData) {
     setPending(true);
     setError(null);
-    const result = await changeOrderStatus(orderId, formData);
-    setPending(false);
-    if (result?.error) {
-      setError(result.error);
+    try {
+      const result = await changeOrderStatus(orderId, formData);
+      if (result?.error) {
+        setError(result.error);
+      }
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Ocurrió un error inesperado al cambiar el estado."
+      );
+    } finally {
+      setPending(false);
     }
   }
 
