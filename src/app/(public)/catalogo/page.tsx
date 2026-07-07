@@ -126,13 +126,13 @@ export default function Page() {
                 key={product.name}
                 className="bg-white rounded shadow overflow-hidden"
               >
-                <div className="relative aspect-[4/3] bg-brand-light">
+                <div className="relative aspect-square bg-brand-light">
                   <Image
                     src={product.image}
                     alt={product.name}
                     fill
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover"
+                    className="object-contain p-4"
                   />
                 </div>
                 <div className="p-4">

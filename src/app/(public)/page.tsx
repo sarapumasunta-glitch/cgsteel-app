@@ -135,13 +135,13 @@ export default function HomePage() {
         <div className="mt-8 grid grid-cols-2 lg:grid-cols-3 gap-6">
           {CATALOG_HIGHLIGHTS.map((item) => (
             <div key={item.image} className="bg-white rounded shadow overflow-hidden">
-              <div className="relative aspect-[4/3] bg-brand-light">
+              <div className="relative aspect-square bg-brand-light">
                 <Image
                   src={item.image}
                   alt={item.name}
                   fill
                   sizes="(min-width: 1024px) 33vw, 50vw"
-                  className="object-cover"
+                  className="object-contain p-4"
                 />
               </div>
               <p className="px-3 py-2 text-sm font-medium text-brand-dark">

@@ -13,7 +13,7 @@ export default function PublicHeader() {
 
   return (
     <header className="bg-brand-dark border-b border-brand-medium/20 sticky top-0 z-50">
-      <div className="px-6 md:px-8 py-4 flex items-center justify-between">
+      <div className="px-6 md:px-8 py-5 md:py-6 flex items-center justify-between">
         <Link href="/" className="flex items-center">
           {/*
             logo-header.png / logo-icon.png son azul oscuro y quedan
@@ -26,7 +26,7 @@ export default function PublicHeader() {
             width={640}
             height={640}
             priority
-            className="h-12 w-auto hidden md:block"
+            className="h-16 w-auto hidden md:block"
           />
           <Image
             src="/brand/logo-mono-white.png"
@@ -34,7 +34,7 @@ export default function PublicHeader() {
             width={640}
             height={640}
             priority
-            className="h-10 w-auto md:hidden"
+            className="h-12 w-auto md:hidden"
           />
         </Link>
 

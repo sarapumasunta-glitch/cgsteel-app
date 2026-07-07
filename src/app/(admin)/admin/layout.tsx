@@ -29,9 +29,9 @@ export default async function AdminLayout({
           alt="Cg Steel Design"
           width={640}
           height={640}
-          className="h-11 w-auto"
+          className="h-16 w-auto"
         />
-        <nav className="mt-8 space-y-2 text-sm">
+        <nav className="mt-10 space-y-2 text-sm">
           <a href="/admin" className="block hover:text-brand-accent">
             Dashboard
           </a>
