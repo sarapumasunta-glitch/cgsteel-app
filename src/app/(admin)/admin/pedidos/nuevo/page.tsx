@@ -1,7 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
 import NewOrderForm from "./NewOrderForm";
 
-export default async function NuevoPedidoPage() {
+export default async function NuevoPedidoPage({
+  searchParams,
+}: {
+  searchParams: { client_id?: string };
+}) {
   const supabase = createClient();
   const { data: clients } = await supabase
     .from("clients")
@@ -12,7 +16,10 @@ export default async function NuevoPedidoPage() {
     <div>
       <h1 className="text-2xl font-bold text-industrial-blue">Nuevo pedido</h1>
       <div className="mt-6">
-        <NewOrderForm clients={clients ?? []} />
+        <NewOrderForm
+          clients={clients ?? []}
+          preselectedClientId={searchParams.client_id}
+        />
       </div>
     </div>
   );

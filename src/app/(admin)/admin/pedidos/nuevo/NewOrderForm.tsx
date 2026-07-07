@@ -11,7 +11,13 @@ type ClientOption = {
   company_name: string | null;
 };
 
-export default function NewOrderForm({ clients }: { clients: ClientOption[] }) {
+export default function NewOrderForm({
+  clients,
+  preselectedClientId,
+}: {
+  clients: ClientOption[];
+  preselectedClientId?: string;
+}) {
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -61,6 +67,7 @@ export default function NewOrderForm({ clients }: { clients: ClientOption[] }) {
               <select
                 name="client_id"
                 required
+                defaultValue={preselectedClientId ?? ""}
                 className="border rounded px-3 py-2 text-sm flex-1"
               >
                 <option value="">Selecciona un cliente...</option>

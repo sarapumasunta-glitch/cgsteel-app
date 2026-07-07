@@ -15,6 +15,11 @@ export default async function AdminLayout({
     redirect("/login");
   }
 
+  const { count: newRequestsCount } = await supabase
+    .from("quote_requests")
+    .select("*", { count: "exact", head: true })
+    .eq("status", "nuevo");
+
   return (
     <div className="min-h-screen flex">
       <aside className="w-64 bg-industrial-blue text-off-white p-6">
@@ -22,6 +27,17 @@ export default async function AdminLayout({
         <nav className="mt-8 space-y-2 text-sm">
           <a href="/admin" className="block hover:text-industrial-orange">
             Dashboard
+          </a>
+          <a
+            href="/admin/solicitudes"
+            className="flex items-center justify-between hover:text-industrial-orange"
+          >
+            Solicitudes
+            {!!newRequestsCount && (
+              <span className="bg-industrial-orange text-white text-xs font-semibold rounded-full px-2 py-0.5">
+                {newRequestsCount}
+              </span>
+            )}
           </a>
           <a
             href="/admin/clientes"
