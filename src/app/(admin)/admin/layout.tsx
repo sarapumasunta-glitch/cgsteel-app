@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function AdminLayout({
@@ -22,44 +23,50 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen flex">
-      <aside className="w-64 bg-industrial-blue text-off-white p-6">
-        <h2 className="font-bold text-lg">Cg Steel Design</h2>
+      <aside className="w-64 bg-brand-dark text-white p-6">
+        <Image
+          src="/brand/logo-mono-white.png"
+          alt="Cg Steel Design"
+          width={640}
+          height={640}
+          className="h-11 w-auto"
+        />
         <nav className="mt-8 space-y-2 text-sm">
-          <a href="/admin" className="block hover:text-industrial-orange">
+          <a href="/admin" className="block hover:text-brand-accent">
             Dashboard
           </a>
           <a
             href="/admin/solicitudes"
-            className="flex items-center justify-between hover:text-industrial-orange"
+            className="flex items-center justify-between hover:text-brand-accent"
           >
             Solicitudes
             {!!newRequestsCount && (
-              <span className="bg-industrial-orange text-white text-xs font-semibold rounded-full px-2 py-0.5">
+              <span className="bg-brand-accent text-white text-xs font-semibold rounded-full px-2 py-0.5">
                 {newRequestsCount}
               </span>
             )}
           </a>
           <a
             href="/admin/clientes"
-            className="block hover:text-industrial-orange"
+            className="block hover:text-brand-accent"
           >
             Clientes
           </a>
           <a
             href="/admin/cotizaciones"
-            className="block hover:text-industrial-orange"
+            className="block hover:text-brand-accent"
           >
             Cotizaciones
           </a>
           <a
             href="/admin/pedidos"
-            className="block hover:text-industrial-orange"
+            className="block hover:text-brand-accent"
           >
             Pedidos
           </a>
         </nav>
       </aside>
-      <main className="flex-1 p-8 bg-off-white">{children}</main>
+      <main className="flex-1 p-8 bg-brand-light">{children}</main>
     </div>
   );
 }

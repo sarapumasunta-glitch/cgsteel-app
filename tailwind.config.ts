@@ -15,6 +15,14 @@ const config: Config = {
         "off-white": "#F8F9FA",
         "carbon-black": "#1F2328",
         "industrial-orange": "#F97316",
+        // Identidad de marca "Azul corporativo"
+        brand: {
+          dark: "#0C2B3E",
+          medium: "#3E5C6E",
+          light: "#F5F6F7",
+          accent: "#C97B1E",
+          ring: "#155E8A",
+        },
       },
       fontFamily: {
         heading: ["Montserrat", "sans-serif"],

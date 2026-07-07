@@ -27,12 +27,12 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-carbon-black">
+    <main className="min-h-screen flex items-center justify-center bg-brand-dark">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded shadow w-full max-w-sm"
+        className="bg-brand-light p-8 rounded shadow w-full max-w-sm"
       >
-        <h1 className="text-xl font-bold text-industrial-blue">
+        <h1 className="text-xl font-bold text-brand-dark">
           Cg Steel Design — Acceso administrador
         </h1>
         <input
@@ -40,19 +40,19 @@ export default function LoginPage() {
           placeholder="Correo"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border rounded px-4 py-2 mt-6"
+          className="w-full border border-brand-medium/20 rounded px-4 py-2 mt-6"
         />
         <input
           type="password"
           placeholder="Contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border rounded px-4 py-2 mt-3"
+          className="w-full border border-brand-medium/20 rounded px-4 py-2 mt-3"
         />
         {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
         <button
           type="submit"
-          className="w-full bg-industrial-orange text-white font-semibold py-3 rounded mt-6"
+          className="w-full bg-brand-accent text-white font-semibold py-3 rounded mt-6 hover:brightness-90"
         >
           Ingresar
         </button>

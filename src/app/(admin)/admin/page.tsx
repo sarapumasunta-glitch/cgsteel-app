@@ -39,14 +39,14 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-industrial-blue">
+      <h1 className="text-2xl font-bold text-brand-dark">
         Dashboard gerencial
       </h1>
       <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
         {cards.map((c) => (
           <div key={c.label} className="bg-white rounded shadow p-6">
-            <p className="text-steel-gray text-sm">{c.label}</p>
-            <p className="text-3xl font-bold text-industrial-blue mt-2">
+            <p className="text-brand-medium text-sm">{c.label}</p>
+            <p className="text-3xl font-bold text-brand-dark mt-2">
               {c.value}
             </p>
           </div>
