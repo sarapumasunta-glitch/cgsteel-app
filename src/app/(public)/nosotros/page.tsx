@@ -1,9 +1,9 @@
 export default function Page() {
   return (
     <main className="px-6 md:px-8 py-16 max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold text-industrial-blue">Nosotros</h1>
+      <h1 className="text-3xl font-bold text-brand-dark">Nosotros</h1>
 
-      <p className="mt-6 text-steel-gray leading-relaxed">
+      <p className="mt-6 text-brand-medium leading-relaxed">
         Cg Steel Design nació de la unión entre el oficio metalúrgico
         tradicional y las herramientas de fabricación digital. Diseñamos y
         fabricamos en metal piezas que exigen precisión: desde rótulos
@@ -11,7 +11,7 @@ export default function Page() {
         señalética y estructuras para eventos.
       </p>
 
-      <p className="mt-4 text-steel-gray leading-relaxed">
+      <p className="mt-4 text-brand-medium leading-relaxed">
         Cada proyecto pasa por nuestro propio flujo de trabajo: diseño,
         cotización, fabricación, control de calidad y entrega, con
         seguimiento visible para el cliente en cada etapa. Combinamos corte,
@@ -20,7 +20,7 @@ export default function Page() {
         sin sacrificar el acabado.
       </p>
 
-      <p className="mt-4 text-steel-gray leading-relaxed">
+      <p className="mt-4 text-brand-medium leading-relaxed">
         Nuestra misión es simple: convertir una idea o un boceto en una
         pieza metálica funcional y bien terminada, con la misma seriedad
         tanto en un pedido pequeño como en un proyecto industrial completo.
