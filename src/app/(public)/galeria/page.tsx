@@ -1,8 +1,8 @@
 export default function Page() {
   return (
     <main className="px-8 py-16">
-      <h1 className="text-3xl font-bold text-industrial-blue">Galería</h1>
-      <p className="mt-4 text-steel-gray">Contenido pendiente de desarrollo.</p>
+      <h1 className="text-3xl font-bold text-brand-dark">Galería</h1>
+      <p className="mt-4 text-brand-medium">Contenido pendiente de desarrollo.</p>
     </main>
   );
 }
