@@ -8,6 +8,7 @@ export async function createOrder(formData: FormData) {
   const client_id = String(formData.get("client_id") ?? "");
   const description = String(formData.get("description") ?? "").trim();
   const channel = String(formData.get("channel") ?? "") as OrderChannel;
+  const quote_id = emptyToNull(formData.get("quote_id"));
 
   if (!client_id || !description || !channel) {
     return { error: "Cliente, descripción y canal son obligatorios." };
@@ -24,6 +25,7 @@ export async function createOrder(formData: FormData) {
       client_id,
       description,
       channel,
+      quote_id,
       estimated_value: numberOrZero(formData.get("estimated_value")),
       estimated_cost: numberOrZero(formData.get("estimated_cost")),
       estimated_delivery_date: emptyToNull(formData.get("estimated_delivery_date")),

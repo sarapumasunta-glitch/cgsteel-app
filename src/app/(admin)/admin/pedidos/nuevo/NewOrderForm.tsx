@@ -14,9 +14,15 @@ type ClientOption = {
 export default function NewOrderForm({
   clients,
   preselectedClientId,
+  quoteId,
+  defaultDescription,
+  defaultEstimatedValue,
 }: {
   clients: ClientOption[];
   preselectedClientId?: string;
+  quoteId?: string;
+  defaultDescription?: string;
+  defaultEstimatedValue?: number;
 }) {
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -49,6 +55,7 @@ export default function NewOrderForm({
 
   return (
     <form action={handleSubmit} className="bg-white rounded shadow p-6 max-w-2xl">
+      {quoteId && <input type="hidden" name="quote_id" value={quoteId} />}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-steel-gray mb-1">
@@ -95,6 +102,7 @@ export default function NewOrderForm({
           <textarea
             name="description"
             required
+            defaultValue={defaultDescription}
             className="border rounded px-3 py-2 text-sm w-full"
           />
         </div>
@@ -135,6 +143,7 @@ export default function NewOrderForm({
             type="number"
             step="0.01"
             name="estimated_value"
+            defaultValue={defaultEstimatedValue}
             className="border rounded px-3 py-2 text-sm w-full"
           />
         </div>
