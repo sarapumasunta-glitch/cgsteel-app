@@ -1,12 +1,25 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import NewClientForm from "./NewClientForm";
+import ClientesSearch from "./ClientesSearch";
 
-export default async function ClientesPage() {
+export default async function ClientesPage({
+  searchParams,
+}: {
+  searchParams: { q?: string };
+}) {
   const supabase = createClient();
-  const { data: clients } = await supabase
-    .from("clients")
-    .select("*")
-    .order("created_at", { ascending: false });
+
+  let query = supabase.from("clients").select("*").order("created_at", { ascending: false });
+
+  if (searchParams.q) {
+    const term = searchParams.q.trim();
+    query = query.or(
+      `contact_name.ilike.%${term}%,company_name.ilike.%${term}%,ruc.ilike.%${term}%`
+    );
+  }
+
+  const { data: clients } = await query;
 
   return (
     <div>
@@ -15,7 +28,11 @@ export default async function ClientesPage() {
         <NewClientForm />
       </div>
 
-      <div className="mt-6 bg-white rounded shadow overflow-x-auto">
+      <div className="mt-4">
+        <ClientesSearch />
+      </div>
+
+      <div className="mt-4 bg-white rounded shadow overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left text-steel-gray border-b">
@@ -27,25 +44,38 @@ export default async function ClientesPage() {
           </thead>
           <tbody>
             {(clients ?? []).map((client) => (
-              <tr key={client.id} className="border-b last:border-0">
+              <tr
+                key={client.id}
+                className="border-b last:border-0 hover:bg-off-white cursor-pointer"
+              >
                 <td className="px-4 py-3 font-medium text-carbon-black">
-                  {client.contact_name}
+                  <Link href={`/admin/clientes/${client.id}`} className="block">
+                    {client.contact_name}
+                  </Link>
                 </td>
                 <td className="px-4 py-3 text-steel-gray">
-                  {client.company_name ?? "—"}
+                  <Link href={`/admin/clientes/${client.id}`} className="block">
+                    {client.company_name ?? "—"}
+                  </Link>
                 </td>
                 <td className="px-4 py-3 text-steel-gray">
-                  {client.phone ?? "—"}
+                  <Link href={`/admin/clientes/${client.id}`} className="block">
+                    {client.phone ?? "—"}
+                  </Link>
                 </td>
                 <td className="px-4 py-3 text-steel-gray">
-                  {client.email ?? "—"}
+                  <Link href={`/admin/clientes/${client.id}`} className="block">
+                    {client.email ?? "—"}
+                  </Link>
                 </td>
               </tr>
             ))}
             {(clients ?? []).length === 0 && (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-steel-gray">
-                  Todavía no hay clientes registrados.
+                  {searchParams.q
+                    ? "Ningún cliente coincide con la búsqueda."
+                    : "Todavía no hay clientes registrados."}
                 </td>
               </tr>
             )}
