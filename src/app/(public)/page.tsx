@@ -1,36 +1,47 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  Lightbulb,
-  Armchair,
-  SignpostBig,
-  PartyPopper,
   Target,
   HeartHandshake,
   Clock,
   BadgeCheck,
+  FileText,
+  PenTool,
+  Flame,
+  Wrench,
+  ShieldCheck,
 } from "lucide-react";
+import { BUSINESS_LINES } from "@/lib/businessLines";
+import GalleryGrid from "@/components/GalleryGrid";
+import { GALLERY_IMAGES } from "@/lib/gallery";
 
-const SERVICES = [
+const GALLERY_PREVIEW = GALLERY_IMAGES.slice(0, 8);
+
+const HOW_WE_WORK = [
   {
-    icon: Lightbulb,
-    title: "Rótulos y cajas de luz",
-    description: "Rótulos luminosos y cajas de luz publicitarias a medida.",
+    icon: FileText,
+    title: "Cotización",
+    description: "Nos cuentas tu proyecto y te enviamos una cotización clara.",
   },
   {
-    icon: Armchair,
-    title: "Mobiliario metálico",
-    description: "Mobiliario metálico a medida para locales e industria.",
+    icon: PenTool,
+    title: "Diseño",
+    description: "Definimos medidas, materiales y acabados antes de fabricar.",
   },
   {
-    icon: SignpostBig,
-    title: "Señalética",
-    description: "Señalética informativa y de seguridad en PVC y vinil.",
+    icon: Flame,
+    title: "Fabricación",
+    description: "Corte, plegado y soldadura en nuestro taller propio.",
   },
   {
-    icon: PartyPopper,
-    title: "Estructuras para eventos",
-    description: "Estructuras metálicas y tarimas para eventos y ferias.",
+    icon: Wrench,
+    title: "Instalación",
+    description: "Entregamos o instalamos en el sitio según el proyecto.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Garantía y seguimiento",
+    description: "Respaldamos el trabajo y damos seguimiento post-entrega.",
   },
 ];
 
@@ -56,8 +67,8 @@ const CATALOG_HIGHLIGHTS = [
     name: "Foot Table",
   },
   {
-    image: "/catalog/sublimados/jarro-blanco.jpg",
-    name: "Jarro blanco 11oz sublimado",
+    image: "/catalog/mobiliario/soporte-arco.jpg",
+    name: "Soporte Arco para decoración",
   },
 ];
 
@@ -85,12 +96,12 @@ export default function HomePage() {
     <main>
       <section className="bg-brand-dark text-white px-8 py-24">
         <h1 className="text-4xl font-bold max-w-2xl">
-          Ingeniería y fabricación en metal para proyectos que exigen
-          precisión.
+          Un solo aliado para cualquier proyecto en metal — de la idea
+          individual a la producción en serie.
         </h1>
         <p className="mt-4 max-w-xl text-white/80 text-lg">
-          Cg Steel Design diseña y fabrica estructuras metálicas, rótulos,
-          cajas de luz y mobiliario industrial a medida.
+          Fabricación por unidad o por volumen — para el hogar, el evento, o
+          la obra completa.
         </p>
         <a
           href="/cotizar"
@@ -102,20 +113,20 @@ export default function HomePage() {
 
       <section className="px-6 md:px-8 py-16 max-w-6xl mx-auto">
         <h2 className="text-2xl font-heading font-bold text-brand-dark">
-          Nuestros servicios
+          Nuestras líneas de negocio
         </h2>
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {SERVICES.map((service) => (
+          {BUSINESS_LINES.map((line) => (
             <div
-              key={service.title}
+              key={line.slug}
               className="bg-white rounded shadow p-6 flex flex-col"
             >
-              <service.icon className="text-brand-accent" size={28} />
+              <line.icon className="text-brand-accent" size={28} />
               <h3 className="mt-3 font-semibold text-brand-dark">
-                {service.title}
+                {line.title}
               </h3>
               <p className="mt-1 text-sm text-brand-medium flex-1">
-                {service.description}
+                {line.message}
               </p>
               <Link
                 href="/servicios"
@@ -135,13 +146,14 @@ export default function HomePage() {
         <div className="mt-8 grid grid-cols-2 lg:grid-cols-3 gap-6">
           {CATALOG_HIGHLIGHTS.map((item) => (
             <div key={item.image} className="bg-white rounded shadow overflow-hidden">
-              <div className="relative aspect-square bg-brand-light">
+              <div className="relative aspect-square bg-brand-light flex items-center justify-center p-4">
                 <Image
                   src={item.image}
                   alt={item.name}
-                  fill
-                  sizes="(min-width: 1024px) 33vw, 50vw"
-                  className="object-contain p-4"
+                  width={220}
+                  height={220}
+                  quality={90}
+                  className="object-contain max-w-full max-h-full w-auto h-auto"
                 />
               </div>
               <p className="px-3 py-2 text-sm font-medium text-brand-dark">
@@ -157,6 +169,51 @@ export default function HomePage() {
           >
             Ver catálogo completo
           </Link>
+        </div>
+      </section>
+
+      <section className="px-6 md:px-8 py-16 max-w-6xl mx-auto">
+        <h2 className="text-2xl font-heading font-bold text-brand-dark">
+          Proyectos realizados
+        </h2>
+        <p className="mt-2 text-brand-medium max-w-2xl">
+          Un vistazo real a nuestro taller y a los proyectos que hemos
+          fabricado.
+        </p>
+        <div className="mt-8">
+          <GalleryGrid images={GALLERY_PREVIEW} />
+        </div>
+        <div className="mt-8 text-center">
+          <Link
+            href="/galeria"
+            className="inline-block bg-brand-accent text-white font-semibold px-6 py-3 rounded hover:brightness-90"
+          >
+            Ver galería completa
+          </Link>
+        </div>
+      </section>
+
+      <section className="px-6 md:px-8 py-16 max-w-6xl mx-auto">
+        <h2 className="text-2xl font-heading font-bold text-brand-dark">
+          Cómo trabajamos
+        </h2>
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          {HOW_WE_WORK.map((step, index) => (
+            <div key={step.title} className="relative flex flex-col items-start">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-brand-accent/10 text-brand-accent">
+                <step.icon size={24} />
+              </div>
+              <p className="mt-3 text-xs font-semibold text-brand-accent">
+                Paso {index + 1}
+              </p>
+              <h3 className="mt-1 font-semibold text-brand-dark">
+                {step.title}
+              </h3>
+              <p className="mt-1 text-sm text-brand-medium">
+                {step.description}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 

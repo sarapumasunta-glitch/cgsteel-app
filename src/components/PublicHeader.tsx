@@ -13,8 +13,8 @@ export default function PublicHeader() {
 
   return (
     <header className="bg-brand-dark border-b border-brand-medium/20 sticky top-0 z-50">
-      <div className="px-6 md:px-8 py-5 md:py-6 flex items-center justify-between">
-        <Link href="/" className="flex items-center">
+      <div className="px-6 md:px-8 py-4 md:py-5 flex items-center justify-between">
+        <Link href="/" className="flex items-center py-1">
           {/*
             logo-header.png / logo-icon.png son azul oscuro y quedan
             invisibles sobre el header oscuro (bg-brand-dark), por eso
@@ -26,7 +26,7 @@ export default function PublicHeader() {
             width={640}
             height={640}
             priority
-            className="h-16 w-auto hidden md:block"
+            className="h-[76px] w-auto hidden md:block"
           />
           <Image
             src="/brand/logo-mono-white.png"
@@ -34,7 +34,7 @@ export default function PublicHeader() {
             width={640}
             height={640}
             priority
-            className="h-12 w-auto md:hidden"
+            className="h-14 w-auto md:hidden"
           />
         </Link>
 
