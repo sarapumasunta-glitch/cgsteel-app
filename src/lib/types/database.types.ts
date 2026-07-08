@@ -250,6 +250,51 @@ export type Database = {
           },
         ]
       }
+      products: {
+        Row: {
+          category: Database["public"]["Enums"]["product_category"]
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          is_featured: boolean
+          name: string
+          price_range: string | null
+          sort_order: number
+          technical_details: string | null
+          updated_at: string
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["product_category"]
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_featured?: boolean
+          name: string
+          price_range?: string | null
+          sort_order?: number
+          technical_details?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["product_category"]
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_featured?: boolean
+          name?: string
+          price_range?: string | null
+          sort_order?: number
+          technical_details?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -557,6 +602,7 @@ export type Database = {
         | "listo_entrega"
         | "entregado"
         | "cancelado"
+      product_category: "arquitectura" | "publicidad" | "decoracion" | "eventos"
       quote_status:
         | "borrador"
         | "enviada"
@@ -730,6 +776,7 @@ export const Constants = {
         "entregado",
         "cancelado",
       ],
+      product_category: ["arquitectura", "publicidad", "decoracion", "eventos"],
       quote_status: ["borrador", "enviada", "aprobada", "rechazada", "vencida"],
       transaction_type: ["ingreso", "egreso"],
       user_role: [

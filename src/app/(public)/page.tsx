@@ -14,6 +14,7 @@ import {
 import { BUSINESS_LINES } from "@/lib/businessLines";
 import GalleryGrid from "@/components/GalleryGrid";
 import { GALLERY_IMAGES } from "@/lib/gallery";
+import { createClient } from "@/lib/supabase/server";
 
 const GALLERY_PREVIEW = GALLERY_IMAGES.slice(0, 8);
 
@@ -45,33 +46,6 @@ const HOW_WE_WORK = [
   },
 ];
 
-const CATALOG_HIGHLIGHTS = [
-  {
-    image: "/catalog/mobiliario/consola-egipcia.jpg",
-    name: 'Consola modelo "Egipcia"',
-  },
-  {
-    image: "/catalog/mobiliario/tarima.jpg",
-    name: "Tarima / Escenario metálico",
-  },
-  {
-    image: "/catalog/rotulacion/caja-luz-circular.jpg",
-    name: "Caja de luz circular",
-  },
-  {
-    image: "/catalog/rotulacion/triangulo-con-luz.jpg",
-    name: "Triángulo (con luz)",
-  },
-  {
-    image: "/catalog/mobiliario/foot-table.jpg",
-    name: "Foot Table",
-  },
-  {
-    image: "/catalog/mobiliario/soporte-arco.jpg",
-    name: "Soporte Arco para decoración",
-  },
-];
-
 const WHY_US = [
   {
     icon: Target,
@@ -91,7 +65,16 @@ const WHY_US = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = createClient();
+  const { data: featuredProducts } = await supabase
+    .from("products")
+    .select("*")
+    .eq("is_active", true)
+    .eq("is_featured", true)
+    .order("sort_order")
+    .limit(6);
+
   return (
     <main>
       <section className="bg-brand-dark text-white px-8 py-24">
@@ -143,25 +126,35 @@ export default function HomePage() {
         <h2 className="text-2xl font-heading font-bold text-brand-dark">
           Nuestro catálogo
         </h2>
-        <div className="mt-8 grid grid-cols-2 lg:grid-cols-3 gap-6">
-          {CATALOG_HIGHLIGHTS.map((item) => (
-            <div key={item.image} className="bg-white rounded shadow overflow-hidden">
-              <div className="relative aspect-square bg-brand-light flex items-center justify-center p-4">
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  width={220}
-                  height={220}
-                  quality={90}
-                  className="object-contain max-w-full max-h-full w-auto h-auto"
-                />
+        {featuredProducts && featuredProducts.length > 0 ? (
+          <div className="mt-8 grid grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredProducts.map((product) => (
+              <div key={product.id} className="bg-white rounded shadow overflow-hidden">
+                <div className="relative aspect-square bg-brand-light flex items-center justify-center p-4">
+                  {product.image_url ? (
+                    <Image
+                      src={product.image_url}
+                      alt={product.name}
+                      width={220}
+                      height={220}
+                      quality={90}
+                      className="object-contain max-w-full max-h-full w-auto h-auto"
+                    />
+                  ) : (
+                    <div className="text-sm text-brand-medium">Sin foto</div>
+                  )}
+                </div>
+                <p className="px-3 py-2 text-sm font-medium text-brand-dark">
+                  {product.name}
+                </p>
               </div>
-              <p className="px-3 py-2 text-sm font-medium text-brand-dark">
-                {item.name}
-              </p>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-8 text-brand-medium">
+            Muy pronto mostraremos aquí una selección de productos destacados.
+          </p>
+        )}
         <div className="mt-8 text-center">
           <Link
             href="/catalogo"
