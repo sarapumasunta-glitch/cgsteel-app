@@ -25,7 +25,7 @@ export default async function ProyectosAdminPage() {
       </div>
       <p className="mt-2 text-sm text-steel-gray max-w-2xl">
         Solo los proyectos en estado &quot;Publicado&quot; y activos aparecen
-        en /galeria. &quot;Repositorio&quot; guarda las fotos sin mostrarlas
+        en /proyectos. &quot;Repositorio&quot; guarda las fotos sin mostrarlas
         todavía.
       </p>
 

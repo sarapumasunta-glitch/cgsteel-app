@@ -9,6 +9,15 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/galeria",
+        destination: "/proyectos",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

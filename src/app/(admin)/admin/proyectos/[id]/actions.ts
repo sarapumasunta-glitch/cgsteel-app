@@ -50,7 +50,7 @@ export async function updateProject(projectId: string, formData: FormData) {
 
   revalidatePath(`/admin/proyectos`);
   revalidatePath(`/admin/proyectos/${projectId}`);
-  revalidatePath("/galeria");
+  revalidatePath("/proyectos");
   revalidatePath("/");
   return { success: true };
 }
@@ -113,7 +113,7 @@ export async function addProjectImages(projectId: string, formData: FormData) {
   }
 
   revalidatePath(`/admin/proyectos/${projectId}`);
-  revalidatePath("/galeria");
+  revalidatePath("/proyectos");
   revalidatePath("/");
 
   if (uploadErrors.length > 0) {
@@ -146,7 +146,7 @@ export async function deleteProjectImage(projectId: string, imageId: string) {
   }
 
   revalidatePath(`/admin/proyectos/${projectId}`);
-  revalidatePath("/galeria");
+  revalidatePath("/proyectos");
   revalidatePath("/");
   return { success: true };
 }
@@ -197,7 +197,7 @@ export async function moveProjectImage(
   }
 
   revalidatePath(`/admin/proyectos/${projectId}`);
-  revalidatePath("/galeria");
+  revalidatePath("/proyectos");
   revalidatePath("/");
   return { success: true };
 }

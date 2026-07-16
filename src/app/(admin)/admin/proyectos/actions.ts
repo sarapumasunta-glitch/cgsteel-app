@@ -17,7 +17,7 @@ export async function toggleProjectStatus(projectId: string, newStatus: ProjectS
   }
 
   revalidatePath("/admin/proyectos");
-  revalidatePath("/galeria");
+  revalidatePath("/proyectos");
   revalidatePath("/");
   return { success: true };
 }
@@ -35,7 +35,7 @@ export async function toggleProjectActive(projectId: string, active: boolean) {
   }
 
   revalidatePath("/admin/proyectos");
-  revalidatePath("/galeria");
+  revalidatePath("/proyectos");
   revalidatePath("/");
   return { success: true };
 }
@@ -77,7 +77,7 @@ export async function deleteProject(projectId: string) {
   }
 
   revalidatePath("/admin/proyectos");
-  revalidatePath("/galeria");
+  revalidatePath("/proyectos");
   revalidatePath("/");
   return { success: true };
 }

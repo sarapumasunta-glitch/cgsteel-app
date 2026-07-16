@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   Target,
@@ -11,13 +10,18 @@ import {
   Wrench,
   ShieldCheck,
 } from "lucide-react";
-import { BUSINESS_LINES } from "@/lib/businessLines";
 import GalleryGrid from "@/components/GalleryGrid";
+import ProjectGalleryGrid from "@/components/ProjectGalleryGrid";
+import ServicesGrid from "@/components/ServicesGrid";
+import { ProductCard, ComboCard } from "@/components/CatalogCards";
 import { GALLERY_IMAGES } from "@/lib/gallery";
+import { getPublishedProjectItems } from "@/lib/projects";
+import { getActiveCombosWithProducts } from "@/lib/combos";
 import { createClient } from "@/lib/supabase/server";
 import HeroBanner from "@/components/HeroBanner";
 
 const GALLERY_PREVIEW = GALLERY_IMAGES.slice(0, 8);
+const FEATURED_PROJECTS_LIMIT = 4;
 
 const HOW_WE_WORK = [
   {
@@ -68,6 +72,18 @@ const WHY_US = [
 
 export default async function HomePage() {
   const supabase = createClient();
+
+  const { data: featuredServices } = await supabase
+    .from("services")
+    .select("id, name, description, photo_url, video_url")
+    .eq("active", true)
+    .order("display_order")
+    .limit(4);
+
+  const projectItems = await getPublishedProjectItems(supabase);
+  const featuredProjects = projectItems.slice(0, FEATURED_PROJECTS_LIMIT);
+  const hasDynamicProjects = featuredProjects.length > 0;
+
   const { data: featuredProducts } = await supabase
     .from("products")
     .select("*")
@@ -76,35 +92,57 @@ export default async function HomePage() {
     .order("sort_order")
     .limit(6);
 
+  const featuredCombos = await getActiveCombosWithProducts(supabase, 2);
+
   return (
     <main>
       <HeroBanner />
 
       <section className="px-6 md:px-8 py-16 max-w-6xl mx-auto">
         <h2 className="text-2xl font-heading font-bold text-brand-dark">
-          Nuestras líneas de negocio
+          Nuestros servicios
         </h2>
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {BUSINESS_LINES.map((line) => (
-            <div
-              key={line.slug}
-              className="bg-white rounded shadow p-6 flex flex-col"
-            >
-              <line.icon className="text-brand-accent" size={28} />
-              <h3 className="mt-3 font-semibold text-brand-dark">
-                {line.title}
-              </h3>
-              <p className="mt-1 text-sm text-brand-medium flex-1">
-                {line.message}
-              </p>
-              <Link
-                href="/servicios"
-                className="mt-3 text-sm font-semibold text-brand-ring hover:text-brand-accent"
-              >
-                Ver más →
-              </Link>
-            </div>
-          ))}
+        {featuredServices && featuredServices.length > 0 ? (
+          <div className="mt-8">
+            <ServicesGrid services={featuredServices} showCatalogLink={false} />
+          </div>
+        ) : (
+          <p className="mt-8 text-brand-medium">
+            Muy pronto mostraremos aquí un resumen de nuestros servicios.
+          </p>
+        )}
+        <div className="mt-8 text-center">
+          <Link
+            href="/servicios"
+            className="inline-block bg-brand-accent text-white font-semibold px-6 py-3 rounded hover:brightness-90"
+          >
+            Ver todos los servicios
+          </Link>
+        </div>
+      </section>
+
+      <section className="px-6 md:px-8 py-16 max-w-6xl mx-auto">
+        <h2 className="text-2xl font-heading font-bold text-brand-dark">
+          Proyectos destacados
+        </h2>
+        <p className="mt-2 text-brand-medium max-w-2xl">
+          Un vistazo real a nuestro taller y a los proyectos que hemos
+          fabricado.
+        </p>
+        <div className="mt-8">
+          {hasDynamicProjects ? (
+            <ProjectGalleryGrid projects={featuredProjects} />
+          ) : (
+            <GalleryGrid images={GALLERY_PREVIEW} />
+          )}
+        </div>
+        <div className="mt-8 text-center">
+          <Link
+            href="/proyectos"
+            className="inline-block bg-brand-accent text-white font-semibold px-6 py-3 rounded hover:brightness-90"
+          >
+            Ver todos los proyectos
+          </Link>
         </div>
       </section>
 
@@ -115,25 +153,7 @@ export default async function HomePage() {
         {featuredProducts && featuredProducts.length > 0 ? (
           <div className="mt-8 grid grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredProducts.map((product) => (
-              <div key={product.id} className="bg-white rounded shadow overflow-hidden">
-                <div className="relative aspect-square bg-brand-light flex items-center justify-center p-4">
-                  {product.image_url ? (
-                    <Image
-                      src={product.image_url}
-                      alt={product.name}
-                      width={220}
-                      height={220}
-                      quality={90}
-                      className="object-contain max-w-full max-h-full w-auto h-auto"
-                    />
-                  ) : (
-                    <div className="text-sm text-brand-medium">Sin foto</div>
-                  )}
-                </div>
-                <p className="px-3 py-2 text-sm font-medium text-brand-dark">
-                  {product.name}
-                </p>
-              </div>
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         ) : (
@@ -141,33 +161,26 @@ export default async function HomePage() {
             Muy pronto mostraremos aquí una selección de productos destacados.
           </p>
         )}
+
+        {featuredCombos.length > 0 && (
+          <div className="mt-12">
+            <h3 className="text-lg font-heading font-bold text-brand-dark">
+              Combos especiales
+            </h3>
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {featuredCombos.map((combo) => (
+                <ComboCard key={combo.id} combo={combo} />
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="mt-8 text-center">
           <Link
             href="/catalogo"
             className="inline-block bg-brand-accent text-white font-semibold px-6 py-3 rounded hover:brightness-90"
           >
             Ver catálogo completo
-          </Link>
-        </div>
-      </section>
-
-      <section className="px-6 md:px-8 py-16 max-w-6xl mx-auto">
-        <h2 className="text-2xl font-heading font-bold text-brand-dark">
-          Proyectos realizados
-        </h2>
-        <p className="mt-2 text-brand-medium max-w-2xl">
-          Un vistazo real a nuestro taller y a los proyectos que hemos
-          fabricado.
-        </p>
-        <div className="mt-8">
-          <GalleryGrid images={GALLERY_PREVIEW} />
-        </div>
-        <div className="mt-8 text-center">
-          <Link
-            href="/galeria"
-            className="inline-block bg-brand-accent text-white font-semibold px-6 py-3 rounded hover:brightness-90"
-          >
-            Ver galería completa
           </Link>
         </div>
       </section>

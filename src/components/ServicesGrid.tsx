@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { PlayCircle, Wrench, X } from "lucide-react";
 
 export type ServiceItem = {
@@ -15,9 +16,11 @@ export type ServiceItem = {
 function ServiceCard({
   service,
   onPlayVideo,
+  showCatalogLink,
 }: {
   service: ServiceItem;
   onPlayVideo: () => void;
+  showCatalogLink: boolean;
 }) {
   return (
     <div className="bg-white rounded shadow overflow-hidden flex flex-col">
@@ -53,12 +56,26 @@ function ServiceCard({
         {service.description && (
           <p className="text-sm text-brand-medium">{service.description}</p>
         )}
+        {showCatalogLink && (
+          <Link
+            href="/catalogo"
+            className="mt-auto text-sm font-semibold text-brand-ring hover:text-brand-accent"
+          >
+            ¿Buscas algo así? Mira nuestro catálogo →
+          </Link>
+        )}
       </div>
     </div>
   );
 }
 
-export default function ServicesGrid({ services }: { services: ServiceItem[] }) {
+export default function ServicesGrid({
+  services,
+  showCatalogLink = true,
+}: {
+  services: ServiceItem[];
+  showCatalogLink?: boolean;
+}) {
   const [videoService, setVideoService] = useState<ServiceItem | null>(null);
 
   return (
@@ -69,6 +86,7 @@ export default function ServicesGrid({ services }: { services: ServiceItem[] }) 
             key={service.id}
             service={service}
             onPlayVideo={() => setVideoService(service)}
+            showCatalogLink={showCatalogLink}
           />
         ))}
       </div>
