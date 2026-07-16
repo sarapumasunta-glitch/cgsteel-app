@@ -53,6 +53,78 @@ export type Database = {
         }
         Relationships: []
       }
+      combo_items: {
+        Row: {
+          combo_id: string
+          id: string
+          product_id: string
+          quantity: number
+        }
+        Insert: {
+          combo_id: string
+          id?: string
+          product_id: string
+          quantity?: number
+        }
+        Update: {
+          combo_id?: string
+          id?: string
+          product_id?: string
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "combo_items_combo_id_fkey"
+            columns: ["combo_id"]
+            isOneToOne: false
+            referencedRelation: "combos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "combo_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      combos: {
+        Row: {
+          active: boolean
+          combo_price: number
+          created_at: string
+          description: string | null
+          display_order: number
+          id: string
+          image_url: string | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          combo_price: number
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          image_url?: string | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          combo_price?: number
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          image_url?: string | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       hero_banner_items: {
         Row: {
           active: boolean
@@ -279,9 +351,14 @@ export type Database = {
       }
       products: {
         Row: {
+          base_price: number | null
           category: Database["public"]["Enums"]["product_category"]
           created_at: string
           description: string | null
+          discount_active: boolean
+          discount_label: string | null
+          discount_type: string | null
+          discount_value: number | null
           id: string
           image_url: string | null
           is_active: boolean
@@ -293,9 +370,14 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          base_price?: number | null
           category: Database["public"]["Enums"]["product_category"]
           created_at?: string
           description?: string | null
+          discount_active?: boolean
+          discount_label?: string | null
+          discount_type?: string | null
+          discount_value?: number | null
           id?: string
           image_url?: string | null
           is_active?: boolean
@@ -307,9 +389,14 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          base_price?: number | null
           category?: Database["public"]["Enums"]["product_category"]
           created_at?: string
           description?: string | null
+          discount_active?: boolean
+          discount_label?: string | null
+          discount_type?: string | null
+          discount_value?: number | null
           id?: string
           image_url?: string | null
           is_active?: boolean

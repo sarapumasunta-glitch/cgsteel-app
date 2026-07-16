@@ -59,6 +59,12 @@ export default async function AdminLayout({
             Catálogo
           </a>
           <a
+            href="/admin/combos"
+            className="block hover:text-brand-accent"
+          >
+            Combos
+          </a>
+          <a
             href="/admin/banner"
             className="block hover:text-brand-accent"
           >

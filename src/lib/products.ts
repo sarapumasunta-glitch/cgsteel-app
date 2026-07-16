@@ -10,3 +10,28 @@ export const PRODUCT_CATEGORY_LABELS: Record<ProductCategory, string> = {
   decoracion: "Decoración & Mobiliario en Metal",
   eventos: "Eventos & Espacios Temporales",
 };
+
+export type DiscountType = "percentage" | "fixed";
+
+export const DISCOUNT_TYPES: DiscountType[] = ["percentage", "fixed"];
+
+export const DISCOUNT_TYPE_LABELS: Record<DiscountType, string> = {
+  percentage: "Porcentaje",
+  fixed: "Monto fijo",
+};
+
+export function calculateDiscountedPrice(
+  basePrice: number,
+  discountType: DiscountType,
+  discountValue: number
+): number {
+  const raw =
+    discountType === "percentage"
+      ? basePrice * (1 - discountValue / 100)
+      : basePrice - discountValue;
+  return Math.max(0, Math.round(raw * 100) / 100);
+}
+
+export function formatPrice(value: number) {
+  return `$${value.toLocaleString("es-EC", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
