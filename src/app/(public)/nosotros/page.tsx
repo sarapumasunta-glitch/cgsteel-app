@@ -1,5 +1,5 @@
 const MAPS_EMBED_SRC =
-  "https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1s-0.093929,-78.436098!6i15!3m1!1ses!5m1!1ses";
+  "https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1s-0.0940176,-78.4360572!6i16!3m1!1ses!5m1!1ses";
 
 export default function Page() {
   return (

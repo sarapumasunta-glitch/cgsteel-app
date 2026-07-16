@@ -53,6 +53,33 @@ export type Database = {
         }
         Relationships: []
       }
+      hero_banner_items: {
+        Row: {
+          active: boolean
+          created_at: string
+          display_order: number
+          id: string
+          media_url: string
+          type: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          display_order?: number
+          id?: string
+          media_url: string
+          type: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          display_order?: number
+          id?: string
+          media_url?: string
+          type?: string
+        }
+        Relationships: []
+      }
       order_files: {
         Row: {
           created_at: string
@@ -569,6 +596,7 @@ export type Database = {
     }
     Functions: {
       get_order_by_tracking: { Args: { p_token: string }; Returns: Json }
+      is_admin: { Args: never; Returns: boolean }
       is_staff: { Args: never; Returns: boolean }
     }
     Enums: {

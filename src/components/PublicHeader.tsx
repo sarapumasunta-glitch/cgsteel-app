@@ -13,28 +13,23 @@ export default function PublicHeader() {
 
   return (
     <header className="bg-brand-dark border-b border-brand-medium/20 sticky top-0 z-50">
-      <div className="px-6 md:px-8 py-4 md:py-5 flex items-center justify-between">
-        <Link href="/" className="flex items-center py-1">
-          {/*
-            logo-header.png / logo-icon.png son azul oscuro y quedan
-            invisibles sobre el header oscuro (bg-brand-dark), por eso
-            se usa la variante monocromática blanca en su lugar.
-          */}
+      <div className="h-20 px-6 md:px-8 flex items-center justify-between">
+        {/*
+          logo-header.png / logo-icon.png son azul oscuro y quedan
+          invisibles sobre el header oscuro (bg-brand-dark), por eso
+          se usa la variante monocromática blanca en su lugar. El
+          contenedor tiene altura fija (h-20) y la imagen se ajusta con
+          h-full/object-contain para que el padding transparente del
+          PNG nunca empuje la altura del header.
+        */}
+        <Link href="/" className="flex items-center h-full py-3">
           <Image
-            src="/brand/logo-mono-white.png"
+            src="/brand/logo-icon-mono-white.png"
             alt="Cg Steel Design"
-            width={640}
-            height={640}
+            width={681}
+            height={801}
             priority
-            className="h-[76px] w-auto hidden md:block"
-          />
-          <Image
-            src="/brand/logo-mono-white.png"
-            alt="Cg Steel Design"
-            width={640}
-            height={640}
-            priority
-            className="h-14 w-auto md:hidden"
+            className="h-full w-auto object-contain"
           />
         </Link>
 

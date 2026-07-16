@@ -1,8 +1,8 @@
 import { WHATSAPP_DISPLAY, buildWhatsAppUrl } from "@/lib/whatsapp";
 
 const MAPS_EMBED_SRC =
-  "https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1s-0.093929,-78.436098!6i15!3m1!1ses!5m1!1ses";
-const MAPS_LINK = "https://maps.app.goo.gl/NY83PX8hPdaGi4SV9";
+  "https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1s-0.0940176,-78.4360572!6i16!3m1!1ses!5m1!1ses";
+const MAPS_LINK = "https://maps.app.goo.gl/yVRjW4AHYUdM9cGC8";
 
 export default function Page() {
   return (

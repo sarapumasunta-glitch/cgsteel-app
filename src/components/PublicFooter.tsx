@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Instagram } from "lucide-react";
 import { WHATSAPP_DISPLAY, buildWhatsAppUrl } from "@/lib/whatsapp";
+import PaymentMethods from "@/components/PaymentMethods";
 
 const INSTAGRAM_URL = "https://www.instagram.com/cgsteeldesign";
 const TIKTOK_URL = "https://www.tiktok.com/@cg.steel.design";
@@ -83,6 +84,10 @@ export default function PublicFooter() {
           </Link>
         ))}
       </nav>
+
+      <div className="max-w-5xl mx-auto mt-6 pt-6 border-t border-brand-medium/20">
+        <PaymentMethods />
+      </div>
 
       <div className="max-w-5xl mx-auto mt-6 pt-6 border-t border-brand-medium/20 flex items-center justify-between flex-wrap gap-2">
         <p className="text-xs text-white/40">

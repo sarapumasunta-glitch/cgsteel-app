@@ -15,6 +15,7 @@ import { BUSINESS_LINES } from "@/lib/businessLines";
 import GalleryGrid from "@/components/GalleryGrid";
 import { GALLERY_IMAGES } from "@/lib/gallery";
 import { createClient } from "@/lib/supabase/server";
+import HeroBanner from "@/components/HeroBanner";
 
 const GALLERY_PREVIEW = GALLERY_IMAGES.slice(0, 8);
 
@@ -77,22 +78,7 @@ export default async function HomePage() {
 
   return (
     <main>
-      <section className="bg-brand-dark text-white px-8 py-24">
-        <h1 className="text-4xl font-bold max-w-2xl">
-          Un solo aliado para cualquier proyecto en metal — de la idea
-          individual a la producción en serie.
-        </h1>
-        <p className="mt-4 max-w-xl text-white/80 text-lg">
-          Fabricación por unidad o por volumen — para el hogar, el evento, o
-          la obra completa.
-        </p>
-        <a
-          href="/cotizar"
-          className="inline-block mt-8 bg-brand-accent text-white font-semibold px-6 py-3 rounded hover:brightness-90"
-        >
-          Solicitar cotización
-        </a>
-      </section>
+      <HeroBanner />
 
       <section className="px-6 md:px-8 py-16 max-w-6xl mx-auto">
         <h2 className="text-2xl font-heading font-bold text-brand-dark">
@@ -210,20 +196,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="px-6 md:px-8 py-16 max-w-6xl mx-auto">
-        <h2 className="text-2xl font-heading font-bold text-brand-dark">
-          Por qué elegirnos
-        </h2>
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {WHY_US.map((item) => (
-            <div key={item.text} className="flex items-start gap-3">
-              <item.icon className="text-brand-accent shrink-0" size={24} />
-              <p className="text-brand-dark font-medium">{item.text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       <section className="bg-brand-dark text-white px-6 md:px-8 py-16 text-center">
         <h2 className="text-2xl font-heading font-bold">
           ¿Tienes un proyecto en mente?
@@ -237,6 +209,22 @@ export default async function HomePage() {
         >
           Solicitar cotización
         </a>
+      </section>
+
+      <section className="bg-brand-accent px-6 md:px-8 py-16">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl font-heading font-bold text-white text-center">
+            Por qué elegirnos
+          </h2>
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {WHY_US.map((item) => (
+              <div key={item.text} className="flex items-start gap-3">
+                <item.icon className="text-white shrink-0" size={24} />
+                <p className="text-white font-medium">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
     </main>
   );

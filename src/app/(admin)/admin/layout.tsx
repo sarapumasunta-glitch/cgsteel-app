@@ -25,11 +25,11 @@ export default async function AdminLayout({
     <div className="min-h-screen flex">
       <aside className="w-64 bg-brand-dark text-white p-6">
         <Image
-          src="/brand/logo-mono-white.png"
+          src="/brand/logo-icon-mono-white.png"
           alt="Cg Steel Design"
-          width={640}
-          height={640}
-          className="h-16 w-auto"
+          width={681}
+          height={801}
+          className="h-16 w-auto object-contain"
         />
         <nav className="mt-10 space-y-2 text-sm">
           <a href="/admin" className="block hover:text-brand-accent">
@@ -57,6 +57,12 @@ export default async function AdminLayout({
             className="block hover:text-brand-accent"
           >
             Catálogo
+          </a>
+          <a
+            href="/admin/banner"
+            className="block hover:text-brand-accent"
+          >
+            Banner
           </a>
           <a
             href="/admin/cotizaciones"
