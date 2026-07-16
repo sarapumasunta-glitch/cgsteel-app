@@ -65,6 +65,12 @@ export default async function AdminLayout({
             Banner
           </a>
           <a
+            href="/admin/proyectos"
+            className="block hover:text-brand-accent"
+          >
+            Proyectos
+          </a>
+          <a
             href="/admin/cotizaciones"
             className="block hover:text-brand-accent"
           >
