@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { PlayCircle, Wrench, X } from "lucide-react";
+import Lightbox from "@/components/Lightbox";
 
 export type ServiceItem = {
   id: string;
@@ -16,26 +17,35 @@ export type ServiceItem = {
 function ServiceCard({
   service,
   onPlayVideo,
+  onOpenPhoto,
   showCatalogLink,
 }: {
   service: ServiceItem;
   onPlayVideo: () => void;
+  onOpenPhoto: () => void;
   showCatalogLink: boolean;
 }) {
   return (
     <div className="bg-white rounded shadow overflow-hidden flex flex-col">
       <div className="relative aspect-square bg-brand-light flex items-center justify-center">
         {service.photo_url ? (
-          <Image
-            src={service.photo_url}
-            alt={service.name}
-            width={320}
-            height={320}
-            quality={90}
-            className="object-cover w-full h-full"
-          />
+          <button
+            type="button"
+            onClick={onOpenPhoto}
+            aria-label={`Ver foto de ${service.name} en tamaño completo`}
+            className="absolute inset-0"
+          >
+            <Image
+              src={service.photo_url}
+              alt={service.name}
+              width={320}
+              height={320}
+              quality={90}
+              className="object-cover w-full h-full"
+            />
+          </button>
         ) : (
-          <Wrench className="text-brand-accent" size={44} strokeWidth={1.5} />
+          <Wrench className="text-brand-medium" size={44} strokeWidth={1.5} />
         )}
         {service.video_url && (
           <button
@@ -59,7 +69,7 @@ function ServiceCard({
         {showCatalogLink && (
           <Link
             href="/catalogo"
-            className="mt-auto text-sm font-semibold text-brand-ring hover:text-brand-accent"
+            className="mt-auto text-sm font-semibold text-brand-ring hover:text-brand-dark"
           >
             ¿Buscas algo así? Mira nuestro catálogo →
           </Link>
@@ -77,6 +87,7 @@ export default function ServicesGrid({
   showCatalogLink?: boolean;
 }) {
   const [videoService, setVideoService] = useState<ServiceItem | null>(null);
+  const [photoService, setPhotoService] = useState<ServiceItem | null>(null);
 
   return (
     <>
@@ -86,10 +97,22 @@ export default function ServicesGrid({
             key={service.id}
             service={service}
             onPlayVideo={() => setVideoService(service)}
+            onOpenPhoto={() => setPhotoService(service)}
             showCatalogLink={showCatalogLink}
           />
         ))}
       </div>
+
+      {photoService && photoService.photo_url && (
+        <Lightbox
+          images={[{ src: photoService.photo_url, alt: photoService.name }]}
+          index={0}
+          onNavigate={() => {}}
+          onClose={() => setPhotoService(null)}
+          title={photoService.name}
+          description={photoService.description}
+        />
+      )}
 
       {videoService && videoService.video_url && (
         <div
@@ -117,7 +140,7 @@ export default function ServicesGrid({
               autoPlay
               className="w-full max-h-[80vh] rounded"
             />
-            <p className="mt-3 text-center text-white font-heading font-bold">
+            <p className="mt-3 text-center text-white font-display tracking-wide font-bold">
               {videoService.name}
             </p>
           </div>

@@ -40,8 +40,8 @@ export default function PublicHeader() {
               href={link.href}
               className={
                 pathname === link.href
-                  ? "text-brand-accent"
-                  : "text-white hover:text-brand-accent"
+                  ? "text-white font-semibold"
+                  : "text-white/70 hover:text-white transition-colors"
               }
             >
               {link.label}
@@ -73,8 +73,8 @@ export default function PublicHeader() {
               onClick={() => setOpen(false)}
               className={
                 pathname === link.href
-                  ? "text-brand-accent"
-                  : "text-white"
+                  ? "text-white font-semibold"
+                  : "text-white/70"
               }
             >
               {link.label}

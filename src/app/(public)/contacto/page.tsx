@@ -1,8 +1,8 @@
 import { WHATSAPP_DISPLAY, buildWhatsAppUrl } from "@/lib/whatsapp";
 
 const MAPS_EMBED_SRC =
-  "https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1s-0.0940176,-78.4360572!6i16!3m1!1ses!5m1!1ses";
-const MAPS_LINK = "https://maps.app.goo.gl/yVRjW4AHYUdM9cGC8";
+  "https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1s-0.0939777,-78.4360241!6i16!3m1!1ses!5m1!1ses";
+const MAPS_LINK = "https://maps.app.goo.gl/MBQujVDyxYCMnVPCA";
 
 export default function Page() {
   return (
@@ -31,7 +31,7 @@ export default function Page() {
         <div className="pt-4 border-t border-brand-medium/20">
           <p className="text-sm text-brand-medium">
             ¿Prefieres dejarnos los detalles de tu proyecto por escrito?{" "}
-            <a href="/cotizar" className="font-semibold text-brand-ring hover:text-brand-accent underline">
+            <a href="/cotizar" className="font-semibold text-brand-ring hover:text-brand-dark underline">
               Completa el formulario de cotización
             </a>
             .
@@ -40,7 +40,7 @@ export default function Page() {
       </div>
 
       <div className="mt-8 bg-white rounded shadow p-6">
-        <h2 className="font-heading font-bold text-lg text-brand-dark">
+        <h2 className="font-bold text-lg text-brand-dark">
           Taller propio en Calderón, Quito
         </h2>
         <p className="mt-1 text-sm text-brand-medium">
@@ -62,7 +62,7 @@ export default function Page() {
           href={MAPS_LINK}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-3 inline-block text-sm font-semibold text-brand-ring hover:text-brand-accent underline"
+          className="mt-3 inline-block text-sm font-semibold text-brand-ring hover:text-brand-dark underline"
         >
           Abrir en Google Maps
         </a>

@@ -1,8 +1,12 @@
+import Image from "next/image";
 import { siVisa, siMastercard, siDinersclub } from "simple-icons";
 
 const CARD_ICONS = [siVisa, siMastercard, siDinersclub];
 
-const LOCAL_PAYMENT_METHODS = ["Bivi", "De Una"];
+const LOCAL_PAYMENT_METHODS = [
+  { name: "Bivi", src: "/brand/payment-bivi.png" },
+  { name: "De Una", src: "/brand/payment-deuna.png" },
+];
 
 export default function PaymentMethods() {
   return (
@@ -28,13 +32,19 @@ export default function PaymentMethods() {
             </svg>
           </div>
         ))}
-        {LOCAL_PAYMENT_METHODS.map((name) => (
+        {LOCAL_PAYMENT_METHODS.map((method) => (
           <div
-            key={name}
-            title={`${name} (logo próximamente)`}
-            className="flex items-center justify-center h-9 px-3 rounded border border-white/20 bg-brand-dark text-xs font-semibold text-white/70"
+            key={method.name}
+            title={method.name}
+            className="flex items-center justify-center h-9 px-3 bg-white rounded"
           >
-            {name}
+            <Image
+              src={method.src}
+              alt={method.name}
+              width={300}
+              height={300}
+              className="h-6 w-6 object-contain"
+            />
           </div>
         ))}
       </div>

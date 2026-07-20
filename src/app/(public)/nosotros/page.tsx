@@ -1,5 +1,5 @@
 const MAPS_EMBED_SRC =
-  "https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1s-0.0940176,-78.4360572!6i16!3m1!1ses!5m1!1ses";
+  "https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1s-0.0939777,-78.4360241!6i16!3m1!1ses!5m1!1ses";
 
 export default function Page() {
   return (
@@ -30,7 +30,7 @@ export default function Page() {
       </p>
 
       <div className="mt-10 bg-white rounded shadow p-6">
-        <h2 className="font-heading font-bold text-lg text-brand-dark">
+        <h2 className="font-bold text-lg text-brand-dark">
           Taller propio en Calderón, Quito
         </h2>
         <p className="mt-1 text-sm text-brand-medium">

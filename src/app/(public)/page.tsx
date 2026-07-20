@@ -11,7 +11,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import GalleryGrid from "@/components/GalleryGrid";
-import ProjectGalleryGrid from "@/components/ProjectGalleryGrid";
+import FeaturedProjectsGrid from "@/components/FeaturedProjectsGrid";
 import ServicesGrid from "@/components/ServicesGrid";
 import { ProductCard, ComboCard } from "@/components/CatalogCards";
 import { GALLERY_IMAGES } from "@/lib/gallery";
@@ -21,7 +21,7 @@ import { createClient } from "@/lib/supabase/server";
 import HeroBanner from "@/components/HeroBanner";
 
 const GALLERY_PREVIEW = GALLERY_IMAGES.slice(0, 8);
-const FEATURED_PROJECTS_LIMIT = 4;
+const FEATURED_PROJECTS_LIMIT = 5;
 
 const HOW_WE_WORK = [
   {
@@ -99,7 +99,7 @@ export default async function HomePage() {
       <HeroBanner />
 
       <section className="px-6 md:px-8 py-16 max-w-6xl mx-auto">
-        <h2 className="text-2xl font-heading font-bold text-brand-dark">
+        <h2 className="text-2xl font-bold text-brand-dark">
           Nuestros servicios
         </h2>
         {featuredServices && featuredServices.length > 0 ? (
@@ -122,7 +122,7 @@ export default async function HomePage() {
       </section>
 
       <section className="px-6 md:px-8 py-16 max-w-6xl mx-auto">
-        <h2 className="text-2xl font-heading font-bold text-brand-dark">
+        <h2 className="text-2xl font-bold text-brand-dark">
           Proyectos destacados
         </h2>
         <p className="mt-2 text-brand-medium max-w-2xl">
@@ -131,7 +131,7 @@ export default async function HomePage() {
         </p>
         <div className="mt-8">
           {hasDynamicProjects ? (
-            <ProjectGalleryGrid projects={featuredProjects} />
+            <FeaturedProjectsGrid projects={featuredProjects} />
           ) : (
             <GalleryGrid images={GALLERY_PREVIEW} />
           )}
@@ -147,7 +147,7 @@ export default async function HomePage() {
       </section>
 
       <section className="px-6 md:px-8 py-16 max-w-6xl mx-auto">
-        <h2 className="text-2xl font-heading font-bold text-brand-dark">
+        <h2 className="text-2xl font-bold text-brand-dark">
           Nuestro catálogo
         </h2>
         {featuredProducts && featuredProducts.length > 0 ? (
@@ -164,7 +164,7 @@ export default async function HomePage() {
 
         {featuredCombos.length > 0 && (
           <div className="mt-12">
-            <h3 className="text-lg font-heading font-bold text-brand-dark">
+            <h3 className="text-lg font-bold text-brand-dark">
               Combos especiales
             </h3>
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -186,16 +186,16 @@ export default async function HomePage() {
       </section>
 
       <section className="px-6 md:px-8 py-16 max-w-6xl mx-auto">
-        <h2 className="text-2xl font-heading font-bold text-brand-dark">
+        <h2 className="text-2xl font-bold text-brand-dark">
           Cómo trabajamos
         </h2>
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {HOW_WE_WORK.map((step, index) => (
             <div key={step.title} className="relative flex flex-col items-start">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-brand-accent/10 text-brand-accent">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-brand-medium/10 text-brand-medium">
                 <step.icon size={24} />
               </div>
-              <p className="mt-3 text-xs font-semibold text-brand-accent">
+              <p className="mt-3 text-xs font-semibold text-brand-medium">
                 Paso {index + 1}
               </p>
               <h3 className="mt-1 font-semibold text-brand-dark">
@@ -210,7 +210,7 @@ export default async function HomePage() {
       </section>
 
       <section className="bg-brand-dark text-white px-6 md:px-8 py-16 text-center">
-        <h2 className="text-2xl font-heading font-bold">
+        <h2 className="text-2xl font-bold">
           ¿Tienes un proyecto en mente?
         </h2>
         <p className="mt-2 text-white/80">
@@ -226,7 +226,7 @@ export default async function HomePage() {
 
       <section className="bg-brand-accent px-6 md:px-8 py-16">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-heading font-bold text-white text-center">
+          <h2 className="text-2xl font-bold text-white text-center">
             Por qué elegirnos
           </h2>
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

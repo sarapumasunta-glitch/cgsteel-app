@@ -44,7 +44,7 @@ export default async function Page() {
           <section key={line.slug} className="mt-16 first:mt-12">
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
               <div>
-                <h2 className="text-xl font-heading font-bold text-brand-dark">
+                <h2 className="text-xl font-bold text-brand-dark">
                   {line.title}
                 </h2>
                 <p className="mt-1 text-brand-medium">{line.message}</p>
@@ -77,7 +77,7 @@ export default async function Page() {
       {combos.length > 0 && (
         <section className="mt-16">
           <div>
-            <h2 className="text-xl font-heading font-bold text-brand-dark">
+            <h2 className="text-xl font-bold text-brand-dark">
               Combos
             </h2>
             <p className="mt-1 text-brand-medium">
@@ -94,7 +94,7 @@ export default async function Page() {
       )}
 
       <section className="mt-16 bg-brand-dark text-white rounded p-10 text-center">
-        <h2 className="text-xl font-heading font-bold">¿Buscas algo más?</h2>
+        <h2 className="text-xl font-bold">¿Buscas algo más?</h2>
         <p className="mt-2 text-white/70 max-w-xl mx-auto">
           Fabricamos piezas a medida a partir de una foto, un plano o una
           idea. Escríbenos y lo conversamos.

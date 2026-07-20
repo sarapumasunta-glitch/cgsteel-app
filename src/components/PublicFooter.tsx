@@ -32,7 +32,7 @@ export default function PublicFooter() {
     <footer className="bg-brand-dark text-white px-6 md:px-8 py-10">
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row md:items-start md:justify-between gap-6">
         <div>
-          <h2 className="font-heading font-bold text-lg">Cg Steel Design</h2>
+          <h2 className="font-bold text-lg">Cg Steel Design</h2>
           <p className="mt-2 text-sm text-white/60 max-w-sm">
             Fabricación digital y estructural en metal: letreros, cajas de
             luz, mobiliario metálico y proyectos industriales a medida.
@@ -44,7 +44,7 @@ export default function PublicFooter() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Síguenos en Instagram"
-              className="flex items-center justify-center w-10 h-10 rounded-full text-white/70 hover:text-brand-accent transition-colors"
+              className="flex items-center justify-center w-10 h-10 rounded-full text-white/70 hover:text-white transition-colors"
             >
               <Instagram size={22} />
             </a>
@@ -53,7 +53,7 @@ export default function PublicFooter() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Síguenos en TikTok"
-              className="flex items-center justify-center w-10 h-10 rounded-full text-white/70 hover:text-brand-accent transition-colors"
+              className="flex items-center justify-center w-10 h-10 rounded-full text-white/70 hover:text-white transition-colors"
             >
               <TikTokIcon size={22} />
             </a>
