@@ -5,7 +5,7 @@ import { createProject } from "./actions";
 import MultiImageDropzone, {
   readImageDimensions,
   type PendingImage,
-} from "../MultiImageDropzone";
+} from "@/components/admin/MultiImageDropzone";
 import { PROJECT_STATUSES, PROJECT_STATUS_LABELS } from "@/lib/projects";
 
 function isRedirectError(err: unknown) {

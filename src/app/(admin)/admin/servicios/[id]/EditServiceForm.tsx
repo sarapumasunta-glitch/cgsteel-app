@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { updateService } from "./actions";
 import type { Tables } from "@/lib/types/database.types";
 
@@ -10,7 +9,6 @@ type Service = Tables<"services">;
 export default function EditServiceForm({ service }: { service: Service }) {
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
-  const [removePhoto, setRemovePhoto] = useState(false);
   const [removeVideo, setRemoveVideo] = useState(false);
 
   async function handleSubmit(formData: FormData) {
@@ -78,52 +76,6 @@ export default function EditServiceForm({ service }: { service: Service }) {
             defaultValue={service.description ?? ""}
             className="border rounded px-3 py-2 text-sm w-full"
           />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-steel-gray mb-1">
-            Foto
-          </label>
-          {service.photo_url && !removePhoto && (
-            <div className="mb-2 flex items-center gap-3">
-              <div className="relative w-20 h-20 bg-off-white rounded overflow-hidden">
-                <Image
-                  src={service.photo_url}
-                  alt={service.name}
-                  width={80}
-                  height={80}
-                  className="object-cover w-full h-full"
-                />
-              </div>
-              <button
-                type="button"
-                onClick={() => setRemovePhoto(true)}
-                className="text-xs text-red-600 hover:underline"
-              >
-                Eliminar foto
-              </button>
-            </div>
-          )}
-          {removePhoto && (
-            <div className="mb-2 flex items-center gap-3">
-              <span className="text-xs text-steel-gray">
-                Se eliminará la foto actual al guardar.
-              </span>
-              <button
-                type="button"
-                onClick={() => setRemovePhoto(false)}
-                className="text-xs text-industrial-blue hover:underline"
-              >
-                Deshacer
-              </button>
-            </div>
-          )}
-          <input
-            type="hidden"
-            name="remove_photo"
-            value={removePhoto ? "1" : ""}
-          />
-          <input type="file" name="photo" accept="image/*" className="text-sm w-full" />
         </div>
 
         <div>

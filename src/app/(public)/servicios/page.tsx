@@ -1,13 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
 import ServicesGrid from "@/components/ServicesGrid";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import TrackedLink from "@/components/TrackedLink";
 
 export default async function Page() {
   const supabase = createClient();
 
   const { data: services } = await supabase
     .from("services")
-    .select("id, name, description, photo_url, video_url")
+    .select("id, name, description, video_url, service_images(image_url, display_order, active)")
     .eq("active", true)
     .order("display_order");
 
@@ -29,16 +30,17 @@ export default async function Page() {
             <p className="text-brand-medium">
               Servicios en actualización, contáctanos por WhatsApp.
             </p>
-            <a
+            <TrackedLink
               href={buildWhatsAppUrl(
                 "Hola, quiero saber más sobre los servicios de Cg Steel Design."
               )}
-              target="_blank"
-              rel="noopener noreferrer"
+              external
+              eventName="click_whatsapp_cotizar"
+              eventParams={{ source: "servicios_sin_resultados" }}
               className="mt-4 inline-block bg-green-600 text-white text-sm font-semibold px-4 py-2 rounded hover:brightness-90"
             >
               Cotizar por WhatsApp
-            </a>
+            </TrackedLink>
           </div>
         )}
       </div>

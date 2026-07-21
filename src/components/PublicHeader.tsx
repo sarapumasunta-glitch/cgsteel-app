@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { NAV_LINKS } from "@/lib/nav";
+import { trackEvent } from "@/lib/analytics";
 
 export default function PublicHeader() {
   const [open, setOpen] = useState(false);
@@ -49,6 +50,7 @@ export default function PublicHeader() {
           ))}
           <Link
             href="/cotizar"
+            onClick={() => trackEvent("click_solicitar_cotizacion")}
             className="bg-brand-accent text-white font-semibold px-4 py-2 rounded hover:brightness-90"
           >
             Solicitar cotización
@@ -82,7 +84,10 @@ export default function PublicHeader() {
           ))}
           <Link
             href="/cotizar"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              trackEvent("click_solicitar_cotizacion");
+              setOpen(false);
+            }}
             className="bg-brand-accent text-white font-semibold px-4 py-2 rounded text-center hover:brightness-90"
           >
             Solicitar cotización

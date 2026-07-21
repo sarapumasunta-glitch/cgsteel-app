@@ -83,6 +83,12 @@ export default async function AdminLayout({
             Servicios
           </a>
           <a
+            href="/admin/confianza"
+            className="block hover:text-brand-accent"
+          >
+            Confían en nosotros
+          </a>
+          <a
             href="/admin/cotizaciones"
             className="block hover:text-brand-accent"
           >

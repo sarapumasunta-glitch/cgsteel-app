@@ -37,6 +37,11 @@ export async function deleteService(serviceId: string) {
     .eq("id", serviceId)
     .single();
 
+  const { data: images } = await supabase
+    .from("service_images")
+    .select("image_url")
+    .eq("service_id", serviceId);
+
   const { error } = await supabase.from("services").delete().eq("id", serviceId);
 
   if (error) {
@@ -44,9 +49,12 @@ export async function deleteService(serviceId: string) {
   }
 
   const paths = [
-    storagePathFromPublicUrl(service?.photo_url ?? null),
-    storagePathFromPublicUrl(service?.video_url ?? null),
-  ].filter((path): path is string => path !== null);
+    service?.photo_url ?? null,
+    service?.video_url ?? null,
+    ...(images ?? []).map((img) => img.image_url),
+  ]
+    .map(storagePathFromPublicUrl)
+    .filter((path): path is string => path !== null);
 
   if (paths.length > 0) {
     await supabase.storage.from("services").remove(paths);

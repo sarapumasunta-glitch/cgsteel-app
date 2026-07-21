@@ -19,6 +19,7 @@ import { getPublishedProjectItems } from "@/lib/projects";
 import { getActiveCombosWithProducts } from "@/lib/combos";
 import { createClient } from "@/lib/supabase/server";
 import HeroBanner from "@/components/HeroBanner";
+import TrackedLink from "@/components/TrackedLink";
 
 const GALLERY_PREVIEW = GALLERY_IMAGES.slice(0, 8);
 const FEATURED_PROJECTS_LIMIT = 5;
@@ -75,7 +76,7 @@ export default async function HomePage() {
 
   const { data: featuredServices } = await supabase
     .from("services")
-    .select("id, name, description, photo_url, video_url")
+    .select("id, name, description, video_url, service_images(image_url, display_order, active)")
     .eq("active", true)
     .order("display_order")
     .limit(4);
@@ -86,7 +87,7 @@ export default async function HomePage() {
 
   const { data: featuredProducts } = await supabase
     .from("products")
-    .select("*")
+    .select("*, product_images(image_url, display_order, active)")
     .eq("is_active", true)
     .eq("is_featured", true)
     .order("sort_order")
@@ -216,12 +217,14 @@ export default async function HomePage() {
         <p className="mt-2 text-white/80">
           Cuéntanos qué necesitas fabricar y te ayudamos a hacerlo realidad.
         </p>
-        <a
+        <TrackedLink
           href="/cotizar"
+          eventName="click_solicitar_cotizacion"
+          eventParams={{ source: "home_bottom_cta" }}
           className="inline-block mt-6 bg-brand-accent text-white font-semibold px-6 py-3 rounded hover:brightness-90"
         >
           Solicitar cotización
-        </a>
+        </TrackedLink>
       </section>
 
       <section className="bg-brand-accent px-6 md:px-8 py-16">

@@ -32,43 +32,28 @@ export async function createProduct(formData: FormData) {
 
   const supabase = createClient();
 
-  let imageUrl: string | null = null;
-  const file = formData.get("image") as File | null;
-  if (file && file.size > 0) {
-    const path = `${crypto.randomUUID()}-${file.name}`;
-    const { error: uploadError } = await supabase.storage
-      .from("products")
-      .upload(path, file);
+  const { data: product, error: insertError } = await supabase
+    .from("products")
+    .insert({
+      name,
+      category,
+      description: emptyToNull(formData.get("description")),
+      technical_details: emptyToNull(formData.get("technical_details")),
+      price_range: emptyToNull(formData.get("price_range")),
+      is_featured: formData.get("is_featured") === "on",
+      is_active: formData.get("is_active") === "on",
+      base_price: basePrice,
+      discount_active: discountActive,
+      discount_type: discountActive ? String(formData.get("discount_type") ?? "percentage") : null,
+      discount_value: discountActive ? discountValue : null,
+      discount_label: discountActive ? emptyToNull(formData.get("discount_label")) : null,
+    })
+    .select("id")
+    .single();
 
-    if (uploadError) {
-      return { error: uploadError.message };
-    }
-
-    const { data: publicUrlData } = supabase.storage
-      .from("products")
-      .getPublicUrl(path);
-    imageUrl = publicUrlData.publicUrl;
+  if (insertError || !product) {
+    return { error: insertError?.message ?? "No se pudo crear el producto." };
   }
 
-  const { error: insertError } = await supabase.from("products").insert({
-    name,
-    category,
-    description: emptyToNull(formData.get("description")),
-    technical_details: emptyToNull(formData.get("technical_details")),
-    price_range: emptyToNull(formData.get("price_range")),
-    image_url: imageUrl,
-    is_featured: formData.get("is_featured") === "on",
-    is_active: formData.get("is_active") === "on",
-    base_price: basePrice,
-    discount_active: discountActive,
-    discount_type: discountActive ? String(formData.get("discount_type") ?? "percentage") : null,
-    discount_value: discountActive ? discountValue : null,
-    discount_label: discountActive ? emptyToNull(formData.get("discount_label")) : null,
-  });
-
-  if (insertError) {
-    return { error: insertError.message };
-  }
-
-  redirect("/admin/catalogo");
+  redirect(`/admin/catalogo/${product.id}`);
 }

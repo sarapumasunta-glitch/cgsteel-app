@@ -7,7 +7,7 @@ export default async function ServiciosAdminPage() {
 
   const { data: services } = await supabase
     .from("services")
-    .select("*")
+    .select("*, service_images(image_url, display_order)")
     .order("display_order");
 
   return (
@@ -39,14 +39,21 @@ export default async function ServiciosAdminPage() {
             </tr>
           </thead>
           <tbody>
-            {(services ?? []).map((service, index) => (
-              <ServiceRow
-                key={service.id}
-                service={service}
-                isFirst={index === 0}
-                isLast={index === (services ?? []).length - 1}
-              />
-            ))}
+            {(services ?? []).map((service, index) => {
+              const thumbnailUrl =
+                [...(service.service_images ?? [])].sort(
+                  (a, b) => a.display_order - b.display_order
+                )[0]?.image_url ?? null;
+              return (
+                <ServiceRow
+                  key={service.id}
+                  service={service}
+                  thumbnailUrl={thumbnailUrl}
+                  isFirst={index === 0}
+                  isLast={index === (services ?? []).length - 1}
+                />
+              );
+            })}
             {(services ?? []).length === 0 && (
               <tr>
                 <td colSpan={6} className="px-4 py-6 text-center text-steel-gray">

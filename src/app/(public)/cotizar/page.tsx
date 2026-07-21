@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { trackEvent } from "@/lib/analytics";
 
 export default function CotizarPage() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
@@ -22,7 +23,12 @@ export default function CotizarPage() {
       description: String(form.get("description") ?? ""),
     });
 
-    setStatus(error ? "error" : "sent");
+    if (error) {
+      setStatus("error");
+    } else {
+      trackEvent("submit_cotizacion");
+      setStatus("sent");
+    }
   }
 
   if (status === "sent") {

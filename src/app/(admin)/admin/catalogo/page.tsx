@@ -8,7 +8,7 @@ export default async function CatalogoAdminPage() {
 
   const { data: products } = await supabase
     .from("products")
-    .select("*")
+    .select("*, product_images(image_url, display_order)")
     .order("sort_order")
     .order("name");
 
@@ -43,14 +43,19 @@ export default async function CatalogoAdminPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {items.map((product) => (
+                    {items.map((product) => {
+                      const thumbnailUrl =
+                        [...(product.product_images ?? [])].sort(
+                          (a, b) => a.display_order - b.display_order
+                        )[0]?.image_url ?? null;
+                      return (
                       <tr key={product.id} className="border-b last:border-0 hover:bg-off-white">
                         <td className="px-4 py-2">
                           <Link href={`/admin/catalogo/${product.id}`}>
                             <div className="relative w-12 h-12 bg-off-white rounded overflow-hidden">
-                              {product.image_url ? (
+                              {thumbnailUrl ? (
                                 <Image
-                                  src={product.image_url}
+                                  src={thumbnailUrl}
                                   alt={product.name}
                                   width={48}
                                   height={48}
@@ -90,7 +95,8 @@ export default async function CatalogoAdminPage() {
                           </span>
                         </td>
                       </tr>
-                    ))}
+                      );
+                    })}
                     {items.length === 0 && (
                       <tr>
                         <td colSpan={4} className="px-4 py-4 text-center text-steel-gray">

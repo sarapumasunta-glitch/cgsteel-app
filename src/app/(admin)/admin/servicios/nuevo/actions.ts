@@ -13,7 +13,6 @@ export async function createService(formData: FormData) {
   const active = formData.get("active") === "on";
   const displayOrderRaw = String(formData.get("display_order") ?? "").trim();
   const displayOrder = displayOrderRaw === "" ? 0 : Number(displayOrderRaw);
-  const photo = formData.get("photo") as File | null;
   const video = formData.get("video") as File | null;
 
   if (!name) {
@@ -40,18 +39,7 @@ export async function createService(formData: FormData) {
     return { error: insertError?.message ?? "No se pudo crear el servicio." };
   }
 
-  const updates: { photo_url?: string; video_url?: string } = {};
-
-  if (photo && photo.size > 0) {
-    const path = `${service.id}/photo-${crypto.randomUUID()}-${photo.name}`;
-    const { error: uploadError } = await supabase.storage
-      .from("services")
-      .upload(path, photo);
-    if (!uploadError) {
-      const { data } = supabase.storage.from("services").getPublicUrl(path);
-      updates.photo_url = data.publicUrl;
-    }
-  }
+  const updates: { video_url?: string } = {};
 
   if (video && video.size > 0) {
     const path = `${service.id}/video-${crypto.randomUUID()}-${video.name}`;
@@ -68,5 +56,5 @@ export async function createService(formData: FormData) {
     await supabase.from("services").update(updates).eq("id", service.id);
   }
 
-  redirect("/admin/servicios");
+  redirect(`/admin/servicios/${service.id}`);
 }

@@ -57,23 +57,6 @@ export async function updateProduct(productId: string, formData: FormData) {
     discount_label: discountActive ? emptyToNull(formData.get("discount_label")) : null,
   };
 
-  const file = formData.get("image") as File | null;
-  if (file && file.size > 0) {
-    const path = `${crypto.randomUUID()}-${file.name}`;
-    const { error: uploadError } = await supabase.storage
-      .from("products")
-      .upload(path, file);
-
-    if (uploadError) {
-      return { error: uploadError.message };
-    }
-
-    const { data: publicUrlData } = supabase.storage
-      .from("products")
-      .getPublicUrl(path);
-    update.image_url = publicUrlData.publicUrl;
-  }
-
   const { error: updateError } = await supabase
     .from("products")
     .update(update)
@@ -116,16 +99,179 @@ export async function deleteProduct(productId: string) {
     .eq("id", productId)
     .single();
 
+  const { data: images } = await supabase
+    .from("product_images")
+    .select("image_url")
+    .eq("product_id", productId);
+
   const { error } = await supabase.from("products").delete().eq("id", productId);
 
   if (error) {
     return { error: error.message };
   }
 
-  const path = storagePathFromPublicUrl(product?.image_url ?? null);
+  const paths = [product?.image_url ?? null, ...(images ?? []).map((img) => img.image_url)]
+    .map(storagePathFromPublicUrl)
+    .filter((path): path is string => path !== null);
+
+  if (paths.length > 0) {
+    await supabase.storage.from("products").remove(paths);
+  }
+
+  redirect("/admin/catalogo");
+}
+
+export async function addProductImages(productId: string, formData: FormData) {
+  const supabase = createClient();
+
+  const { data: existing } = await supabase
+    .from("product_images")
+    .select("display_order")
+    .eq("product_id", productId)
+    .order("display_order", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  let nextOrder = existing ? existing.display_order + 1 : 0;
+
+  const files = (formData.getAll("images") as File[]).filter(
+    (file) => file && file.size > 0
+  );
+  if (files.length === 0) {
+    return { error: "Selecciona al menos una foto." };
+  }
+
+  const uploadErrors: string[] = [];
+
+  for (const file of files) {
+    const path = `${productId}/${crypto.randomUUID()}-${file.name}`;
+    const { error: uploadError } = await supabase.storage
+      .from("products")
+      .upload(path, file);
+
+    if (uploadError) {
+      uploadErrors.push(uploadError.message);
+      continue;
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from("products")
+      .getPublicUrl(path);
+
+    await supabase.from("product_images").insert({
+      product_id: productId,
+      image_url: publicUrlData.publicUrl,
+      display_order: nextOrder++,
+    });
+  }
+
+  revalidatePath(`/admin/catalogo/${productId}`);
+  revalidatePath("/admin/catalogo");
+  revalidatePath("/catalogo");
+  revalidatePath("/");
+
+  if (uploadErrors.length > 0) {
+    return { error: `Algunas fotos no se pudieron subir: ${uploadErrors.join(", ")}` };
+  }
+  return { success: true };
+}
+
+export async function deleteProductImage(productId: string, imageId: string) {
+  const supabase = createClient();
+
+  const { data: image } = await supabase
+    .from("product_images")
+    .select("image_url")
+    .eq("id", imageId)
+    .single();
+
+  const { error } = await supabase.from("product_images").delete().eq("id", imageId);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  const path = storagePathFromPublicUrl(image?.image_url ?? null);
   if (path) {
     await supabase.storage.from("products").remove([path]);
   }
 
-  redirect("/admin/catalogo");
+  revalidatePath(`/admin/catalogo/${productId}`);
+  revalidatePath("/admin/catalogo");
+  revalidatePath("/catalogo");
+  revalidatePath("/");
+  return { success: true };
+}
+
+export async function toggleProductImageActive(
+  productId: string,
+  imageId: string,
+  active: boolean
+) {
+  const supabase = createClient();
+
+  const { error } = await supabase
+    .from("product_images")
+    .update({ active })
+    .eq("id", imageId);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath(`/admin/catalogo/${productId}`);
+  revalidatePath("/catalogo");
+  revalidatePath("/");
+  return { success: true };
+}
+
+export async function moveProductImage(
+  productId: string,
+  imageId: string,
+  direction: "up" | "down"
+) {
+  const supabase = createClient();
+
+  const { data: images } = await supabase
+    .from("product_images")
+    .select("id, display_order")
+    .eq("product_id", productId)
+    .order("display_order");
+
+  if (!images) {
+    return { error: "No se pudo cargar el orden actual." };
+  }
+
+  const index = images.findIndex((img) => img.id === imageId);
+  if (index === -1) {
+    return { error: "Foto no encontrada." };
+  }
+
+  const swapIndex = direction === "up" ? index - 1 : index + 1;
+  if (swapIndex < 0 || swapIndex >= images.length) {
+    return { success: true };
+  }
+
+  const current = images[index];
+  const swapWith = images[swapIndex];
+
+  const [{ error: error1 }, { error: error2 }] = await Promise.all([
+    supabase
+      .from("product_images")
+      .update({ display_order: swapWith.display_order })
+      .eq("id", current.id),
+    supabase
+      .from("product_images")
+      .update({ display_order: current.display_order })
+      .eq("id", swapWith.id),
+  ]);
+
+  if (error1 || error2) {
+    return { error: error1?.message ?? error2?.message };
+  }
+
+  revalidatePath(`/admin/catalogo/${productId}`);
+  revalidatePath("/catalogo");
+  revalidatePath("/");
+  return { success: true };
 }

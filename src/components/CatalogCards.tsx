@@ -7,11 +7,23 @@ import type { Tables } from "@/lib/types/database.types";
 import { type DiscountType, calculateDiscountedPrice, formatPrice } from "@/lib/products";
 import type { ComboWithProducts } from "@/lib/combos";
 import Lightbox from "@/components/Lightbox";
+import TrackedLink from "@/components/TrackedLink";
+import { trackEvent } from "@/lib/analytics";
 
-type Product = Tables<"products">;
+type ProductImage = Pick<Tables<"product_images">, "image_url" | "display_order" | "active">;
+type Product = Tables<"products"> & { product_images?: ProductImage[] };
+
+function getActiveImages(product: Product) {
+  return [...(product.product_images ?? [])]
+    .filter((img) => img.active)
+    .sort((a, b) => a.display_order - b.display_order);
+}
 
 export function ProductCard({ product }: { product: Product }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
+  const activeImages = getActiveImages(product);
+  const cover = activeImages[0];
 
   const hasDiscount =
     product.discount_active &&
@@ -35,15 +47,19 @@ export function ProductCard({ product }: { product: Product }) {
         </span>
       )}
       <div className="relative aspect-square bg-brand-light flex items-center justify-center p-4">
-        {product.image_url ? (
+        {cover ? (
           <button
             type="button"
-            onClick={() => setIsOpen(true)}
+            onClick={() => {
+              setImageIndex(0);
+              setIsOpen(true);
+              trackEvent("view_product_detail", { product_name: product.name });
+            }}
             aria-label={`Ver foto de ${product.name} en tamaño completo`}
             className="w-full h-full flex items-center justify-center"
           >
             <Image
-              src={product.image_url}
+              src={cover.image_url}
               alt={product.name}
               width={280}
               height={280}
@@ -78,11 +94,11 @@ export function ProductCard({ product }: { product: Product }) {
         )}
       </div>
 
-      {isOpen && product.image_url && (
+      {isOpen && activeImages.length > 0 && (
         <Lightbox
-          images={[{ src: product.image_url, alt: product.name }]}
-          index={0}
-          onNavigate={() => {}}
+          images={activeImages.map((img) => ({ src: img.image_url, alt: product.name }))}
+          index={imageIndex}
+          onNavigate={setImageIndex}
           onClose={() => setIsOpen(false)}
           title={product.name}
         />
@@ -130,16 +146,17 @@ export function ComboCard({ combo }: { combo: ComboWithProducts }) {
         <p className="text-sm font-bold text-brand-ring">
           {formatPrice(combo.combo_price)}
         </p>
-        <a
+        <TrackedLink
           href={buildWhatsAppUrl(
             `Hola, quiero cotizar el combo "${combo.name}".`
           )}
-          target="_blank"
-          rel="noopener noreferrer"
+          external
+          eventName="click_whatsapp_cotizar"
+          eventParams={{ source: "combo", combo_name: combo.name }}
           className="mt-auto inline-block bg-green-600 text-white text-sm font-semibold px-4 py-2 rounded text-center hover:brightness-90"
         >
           Cotizar por WhatsApp
-        </a>
+        </TrackedLink>
       </div>
 
       {isOpen && combo.image_url && (

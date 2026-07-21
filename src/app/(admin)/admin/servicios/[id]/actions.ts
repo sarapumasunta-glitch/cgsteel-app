@@ -21,9 +21,7 @@ export async function updateService(serviceId: string, formData: FormData) {
   const active = formData.get("active") === "on";
   const displayOrderRaw = String(formData.get("display_order") ?? "").trim();
   const displayOrder = displayOrderRaw === "" ? 0 : Number(displayOrderRaw);
-  const photo = formData.get("photo") as File | null;
   const video = formData.get("video") as File | null;
-  const removePhoto = formData.get("remove_photo") === "1";
   const removeVideo = formData.get("remove_video") === "1";
 
   if (!name) {
@@ -37,7 +35,7 @@ export async function updateService(serviceId: string, formData: FormData) {
 
   const { data: current } = await supabase
     .from("services")
-    .select("photo_url, video_url")
+    .select("video_url")
     .eq("id", serviceId)
     .single();
 
@@ -46,7 +44,6 @@ export async function updateService(serviceId: string, formData: FormData) {
     description: string | null;
     active: boolean;
     display_order: number;
-    photo_url?: string | null;
     video_url?: string | null;
   } = {
     name,
@@ -54,28 +51,6 @@ export async function updateService(serviceId: string, formData: FormData) {
     active,
     display_order: displayOrder,
   };
-
-  if (photo && photo.size > 0) {
-    const oldPath = storagePathFromPublicUrl(current?.photo_url ?? null);
-    if (oldPath) {
-      await supabase.storage.from("services").remove([oldPath]);
-    }
-    const path = `${serviceId}/photo-${crypto.randomUUID()}-${photo.name}`;
-    const { error: uploadError } = await supabase.storage
-      .from("services")
-      .upload(path, photo);
-    if (uploadError) {
-      return { error: uploadError.message };
-    }
-    const { data } = supabase.storage.from("services").getPublicUrl(path);
-    updates.photo_url = data.publicUrl;
-  } else if (removePhoto) {
-    const oldPath = storagePathFromPublicUrl(current?.photo_url ?? null);
-    if (oldPath) {
-      await supabase.storage.from("services").remove([oldPath]);
-    }
-    updates.photo_url = null;
-  }
 
   if (video && video.size > 0) {
     const oldPath = storagePathFromPublicUrl(current?.video_url ?? null);
@@ -108,5 +83,160 @@ export async function updateService(serviceId: string, formData: FormData) {
   revalidatePath("/admin/servicios");
   revalidatePath(`/admin/servicios/${serviceId}`);
   revalidatePath("/servicios");
+  return { success: true };
+}
+
+export async function addServiceImages(serviceId: string, formData: FormData) {
+  const supabase = createClient();
+
+  const { data: existing } = await supabase
+    .from("service_images")
+    .select("display_order")
+    .eq("service_id", serviceId)
+    .order("display_order", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  let nextOrder = existing ? existing.display_order + 1 : 0;
+
+  const files = (formData.getAll("images") as File[]).filter(
+    (file) => file && file.size > 0
+  );
+  if (files.length === 0) {
+    return { error: "Selecciona al menos una foto." };
+  }
+
+  const uploadErrors: string[] = [];
+
+  for (const file of files) {
+    const path = `${serviceId}/gallery-${crypto.randomUUID()}-${file.name}`;
+    const { error: uploadError } = await supabase.storage
+      .from("services")
+      .upload(path, file);
+
+    if (uploadError) {
+      uploadErrors.push(uploadError.message);
+      continue;
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from("services")
+      .getPublicUrl(path);
+
+    await supabase.from("service_images").insert({
+      service_id: serviceId,
+      image_url: publicUrlData.publicUrl,
+      display_order: nextOrder++,
+    });
+  }
+
+  revalidatePath(`/admin/servicios/${serviceId}`);
+  revalidatePath("/admin/servicios");
+  revalidatePath("/servicios");
+  revalidatePath("/");
+
+  if (uploadErrors.length > 0) {
+    return { error: `Algunas fotos no se pudieron subir: ${uploadErrors.join(", ")}` };
+  }
+  return { success: true };
+}
+
+export async function deleteServiceImage(serviceId: string, imageId: string) {
+  const supabase = createClient();
+
+  const { data: image } = await supabase
+    .from("service_images")
+    .select("image_url")
+    .eq("id", imageId)
+    .single();
+
+  const { error } = await supabase.from("service_images").delete().eq("id", imageId);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  const path = storagePathFromPublicUrl(image?.image_url ?? null);
+  if (path) {
+    await supabase.storage.from("services").remove([path]);
+  }
+
+  revalidatePath(`/admin/servicios/${serviceId}`);
+  revalidatePath("/admin/servicios");
+  revalidatePath("/servicios");
+  revalidatePath("/");
+  return { success: true };
+}
+
+export async function toggleServiceImageActive(
+  serviceId: string,
+  imageId: string,
+  active: boolean
+) {
+  const supabase = createClient();
+
+  const { error } = await supabase
+    .from("service_images")
+    .update({ active })
+    .eq("id", imageId);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath(`/admin/servicios/${serviceId}`);
+  revalidatePath("/servicios");
+  revalidatePath("/");
+  return { success: true };
+}
+
+export async function moveServiceImage(
+  serviceId: string,
+  imageId: string,
+  direction: "up" | "down"
+) {
+  const supabase = createClient();
+
+  const { data: images } = await supabase
+    .from("service_images")
+    .select("id, display_order")
+    .eq("service_id", serviceId)
+    .order("display_order");
+
+  if (!images) {
+    return { error: "No se pudo cargar el orden actual." };
+  }
+
+  const index = images.findIndex((img) => img.id === imageId);
+  if (index === -1) {
+    return { error: "Foto no encontrada." };
+  }
+
+  const swapIndex = direction === "up" ? index - 1 : index + 1;
+  if (swapIndex < 0 || swapIndex >= images.length) {
+    return { success: true };
+  }
+
+  const current = images[index];
+  const swapWith = images[swapIndex];
+
+  const [{ error: error1 }, { error: error2 }] = await Promise.all([
+    supabase
+      .from("service_images")
+      .update({ display_order: swapWith.display_order })
+      .eq("id", current.id),
+    supabase
+      .from("service_images")
+      .update({ display_order: current.display_order })
+      .eq("id", swapWith.id),
+  ]);
+
+  if (error1 || error2) {
+    return { error: error1?.message ?? error2?.message };
+  }
+
+  revalidatePath(`/admin/servicios/${serviceId}`);
+  revalidatePath("/servicios");
+  revalidatePath("/");
   return { success: true };
 }

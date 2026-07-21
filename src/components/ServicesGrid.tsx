@@ -5,14 +5,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { PlayCircle, Wrench, X } from "lucide-react";
 import Lightbox from "@/components/Lightbox";
+import { trackEvent } from "@/lib/analytics";
+
+export type ServiceImage = {
+  image_url: string;
+  display_order: number;
+  active: boolean;
+};
 
 export type ServiceItem = {
   id: string;
   name: string;
   description: string | null;
-  photo_url: string | null;
   video_url: string | null;
+  service_images?: ServiceImage[];
 };
+
+function getActiveImages(service: ServiceItem) {
+  return [...(service.service_images ?? [])]
+    .filter((img) => img.active)
+    .sort((a, b) => a.display_order - b.display_order);
+}
 
 function ServiceCard({
   service,
@@ -25,10 +38,12 @@ function ServiceCard({
   onOpenPhoto: () => void;
   showCatalogLink: boolean;
 }) {
+  const cover = getActiveImages(service)[0];
+
   return (
     <div className="bg-white rounded shadow overflow-hidden flex flex-col">
       <div className="relative aspect-square bg-brand-light flex items-center justify-center">
-        {service.photo_url ? (
+        {cover ? (
           <button
             type="button"
             onClick={onOpenPhoto}
@@ -36,7 +51,7 @@ function ServiceCard({
             className="absolute inset-0"
           >
             <Image
-              src={service.photo_url}
+              src={cover.image_url}
               alt={service.name}
               width={320}
               height={320}
@@ -88,6 +103,9 @@ export default function ServicesGrid({
 }) {
   const [videoService, setVideoService] = useState<ServiceItem | null>(null);
   const [photoService, setPhotoService] = useState<ServiceItem | null>(null);
+  const [photoIndex, setPhotoIndex] = useState(0);
+
+  const photoImages = photoService ? getActiveImages(photoService) : [];
 
   return (
     <>
@@ -97,17 +115,21 @@ export default function ServicesGrid({
             key={service.id}
             service={service}
             onPlayVideo={() => setVideoService(service)}
-            onOpenPhoto={() => setPhotoService(service)}
+            onOpenPhoto={() => {
+              setPhotoService(service);
+              setPhotoIndex(0);
+              trackEvent("view_service_detail", { service_name: service.name });
+            }}
             showCatalogLink={showCatalogLink}
           />
         ))}
       </div>
 
-      {photoService && photoService.photo_url && (
+      {photoService && photoImages.length > 0 && (
         <Lightbox
-          images={[{ src: photoService.photo_url, alt: photoService.name }]}
-          index={0}
-          onNavigate={() => {}}
+          images={photoImages.map((img) => ({ src: img.image_url, alt: photoService.name }))}
+          index={photoIndex}
+          onNavigate={setPhotoIndex}
           onClose={() => setPhotoService(null)}
           title={photoService.name}
           description={photoService.description}

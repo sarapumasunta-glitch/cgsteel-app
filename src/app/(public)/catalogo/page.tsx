@@ -5,15 +5,18 @@ import type { Tables } from "@/lib/types/database.types";
 import type { ProductCategory } from "@/lib/products";
 import { getActiveCombosWithProducts } from "@/lib/combos";
 import { ProductCard, ComboCard } from "@/components/CatalogCards";
+import TrackedLink from "@/components/TrackedLink";
 
-type Product = Tables<"products">;
+type Product = Tables<"products"> & {
+  product_images?: Pick<Tables<"product_images">, "image_url" | "display_order" | "active">[];
+};
 
 export default async function Page() {
   const supabase = createClient();
 
   const { data: products } = await supabase
     .from("products")
-    .select("*")
+    .select("*, product_images(image_url, display_order, active)")
     .eq("is_active", true)
     .order("sort_order")
     .order("name");
@@ -49,14 +52,15 @@ export default async function Page() {
                 </h2>
                 <p className="mt-1 text-brand-medium">{line.message}</p>
               </div>
-              <a
+              <TrackedLink
                 href={buildWhatsAppUrl(line.whatsappMessage)}
-                target="_blank"
-                rel="noopener noreferrer"
+                external
+                eventName="click_whatsapp_cotizar"
+                eventParams={{ source: "catalogo_linea", business_line: line.title }}
                 className="shrink-0 inline-block bg-green-600 text-white text-sm font-semibold px-4 py-2 rounded hover:brightness-90"
               >
                 Cotizar por WhatsApp
-              </a>
+              </TrackedLink>
             </div>
 
             {lineProducts.length > 0 ? (

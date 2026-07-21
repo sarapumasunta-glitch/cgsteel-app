@@ -1,7 +1,18 @@
+import { createClient } from "@/lib/supabase/server";
+import TrustSection from "@/components/TrustSection";
+
 const MAPS_EMBED_SRC =
   "https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1s-0.0939777,-78.4360241!6i16!3m1!1ses!5m1!1ses";
 
-export default function Page() {
+export default async function Page() {
+  const supabase = createClient();
+
+  const { data: trustItems } = await supabase
+    .from("trust_items")
+    .select("id, name, icon_or_photo_url")
+    .eq("active", true)
+    .order("display_order");
+
   return (
     <main className="px-6 md:px-8 py-16 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold text-brand-dark">Nosotros</h1>
@@ -49,6 +60,8 @@ export default function Page() {
           />
         </div>
       </div>
+
+      <TrustSection items={trustItems ?? []} />
     </main>
   );
 }

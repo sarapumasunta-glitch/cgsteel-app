@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import HeroBannerCarousel from "@/components/HeroBannerCarousel";
+import TrackedLink from "@/components/TrackedLink";
 
 function HeroBannerFallback() {
   return (
@@ -12,12 +13,14 @@ function HeroBannerFallback() {
         Fabricación por unidad o por volumen — para el hogar, el evento, o la
         obra completa.
       </p>
-      <a
+      <TrackedLink
         href="/cotizar"
+        eventName="click_solicitar_cotizacion"
+        eventParams={{ source: "hero_banner" }}
         className="inline-block mt-8 bg-brand-accent text-white font-semibold px-6 py-3 rounded hover:brightness-90"
       >
         Solicitar cotización
-      </a>
+      </TrackedLink>
     </section>
   );
 }

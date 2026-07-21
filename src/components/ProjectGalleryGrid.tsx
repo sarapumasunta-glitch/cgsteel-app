@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Lightbox from "@/components/Lightbox";
 import TechnicalCorners from "@/components/TechnicalCorners";
+import { trackEvent } from "@/lib/analytics";
 
 export type ProjectGalleryImage = {
   id: string;
@@ -41,6 +42,7 @@ export default function ProjectGalleryGrid({
               onClick={() => {
                 setOpenProjectIndex(i);
                 setOpenImageIndex(0);
+                trackEvent("view_project_detail", { project_name: project.name });
               }}
               className="group relative block aspect-square overflow-hidden rounded bg-brand-light"
             >

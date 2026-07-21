@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import {
   PRODUCT_CATEGORIES,
   PRODUCT_CATEGORY_LABELS,
@@ -143,24 +142,6 @@ export default function ProductForm({
             defaultValue={product?.technical_details ?? ""}
             className="border rounded px-3 py-2 text-sm w-full"
           />
-        </div>
-
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-steel-gray mb-1">
-            Foto {product ? "(deja vacío para conservar la actual)" : ""}
-          </label>
-          {product?.image_url && (
-            <div className="relative w-24 h-24 mb-2 bg-off-white rounded overflow-hidden">
-              <Image
-                src={product.image_url}
-                alt={product.name}
-                width={96}
-                height={96}
-                className="object-contain w-full h-full"
-              />
-            </div>
-          )}
-          <input type="file" name="image" accept="image/*" className="text-sm w-full" />
         </div>
 
         <div className="flex items-center gap-2">

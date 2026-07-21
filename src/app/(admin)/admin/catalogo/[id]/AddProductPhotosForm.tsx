@@ -2,13 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { addProjectImages } from "./actions";
-import MultiImageDropzone, {
-  readImageDimensions,
-  type PendingImage,
-} from "@/components/admin/MultiImageDropzone";
+import { addProductImages } from "./actions";
+import MultiImageDropzone, { type PendingImage } from "@/components/admin/MultiImageDropzone";
 
-export default function AddPhotosForm({ projectId }: { projectId: string }) {
+export default function AddProductPhotosForm({ productId }: { productId: string }) {
   const router = useRouter();
   const [images, setImages] = useState<PendingImage[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -24,13 +21,9 @@ export default function AddPhotosForm({ projectId }: { projectId: string }) {
     setError(null);
     try {
       const formData = new FormData();
-      const dimensions = await Promise.all(
-        images.map((img) => readImageDimensions(img.file))
-      );
       images.forEach((img) => formData.append("images", img.file));
-      formData.set("dimensions", JSON.stringify(dimensions));
 
-      const result = await addProjectImages(projectId, formData);
+      const result = await addProductImages(productId, formData);
       if (result?.error) {
         setError(result.error);
       } else {
