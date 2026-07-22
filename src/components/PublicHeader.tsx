@@ -67,7 +67,7 @@ export default function PublicHeader() {
       </div>
 
       {open && (
-        <nav className="md:hidden px-6 pb-6 flex flex-col gap-4 text-sm font-medium border-t border-brand-medium/20 pt-4">
+        <nav className="mobile-nav-panel md:hidden px-6 pb-6 flex flex-col gap-4 text-sm font-medium border-t border-brand-medium/20 pt-4">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}

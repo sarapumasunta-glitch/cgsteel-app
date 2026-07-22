@@ -64,7 +64,7 @@ export default function Lightbox({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4"
+      className="lightbox-backdrop fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4"
       onClick={onClose}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
@@ -96,7 +96,7 @@ export default function Lightbox({
       )}
 
       <div
-        className="flex max-h-[90vh] w-full max-w-4xl flex-col items-center"
+        className="lightbox-content flex max-h-[90vh] w-full max-w-4xl flex-col items-center"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative max-h-[75vh] w-full flex items-center justify-center">
